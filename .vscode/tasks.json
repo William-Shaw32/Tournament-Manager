@@ -1,25 +1,22 @@
 {
-    "version": "2.0.0",
-    "tasks": [
-        {
-            "label": "Run JavaFX (Maven)",
-            "type": "shell",
-            "command": "mvn",
-            "args": [
-                "-q",
-                "javafx:run"
-            ],
-            "options": {
-                "cwd": "${workspaceFolder}",
-                "env": {
-                    "MAVEN_OPTS": "--sun-misc-unsafe-memory-access=allow"
-                }
-            },
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "problemMatcher": []
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Run JavaFX (Maven Wrapper)",
+      "type": "shell",
+      "command": "./mvnw",
+      "args": ["-q", "javafx:run"],
+      "options": {
+        "cwd": "${workspaceFolder}",
+        "env": {
+          "MAVEN_OPTS": "--sun-misc-unsafe-memory-access=allow"
         }
-    ]
+      },
+      "windows": {
+        "command": ".\\mvnw.cmd"
+      },
+      "group": { "kind": "build", "isDefault": true },
+      "problemMatcher": []
+    }
+  ]
 }
