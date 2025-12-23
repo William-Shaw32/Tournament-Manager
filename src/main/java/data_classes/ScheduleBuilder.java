@@ -33,7 +33,6 @@ public class ScheduleBuilder
 	 */
 	private class Schedulee
 	{
-		@SuppressWarnings("unused")
 		private String name;            // Player name
 		private int numMatchesIn = 0;   // The number of matches the schedulee has been scheduled in already (Greedy heuristic)
 		private int lastMatchIndex = 0; // THe index of the last match the schedulee was scheduled in (Greedy heuristic)
