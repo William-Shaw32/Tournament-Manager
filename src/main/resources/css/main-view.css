@@ -2,6 +2,10 @@
 /* Classes and IDs can be set for UI elements in scene builder */
 /* Any inline styling done in fxml will take precedence over this file */
 
+/* ========================================= */
+/* Spinner Styling */
+/* ========================================= */
+
 .spinner .text-field 
 {
     -fx-background-color:  #243847;
@@ -38,6 +42,11 @@
     -fx-opacity: 1.0;
 }
 
+
+/* ========================================= */
+/* Button Styling */
+/* ========================================= */
+
 .button 
 {
     -fx-text-fill: #3eb9f2  ;
@@ -56,6 +65,11 @@
     -fx-background-insets: 1;
     -fx-opacity: 0.85;
 }
+
+
+/* ========================================= */
+/* Pagination Styling */
+/* ========================================= */
 
 .pagination .pagination-control .control-box .number-button,
 .pagination .left-arrow-button,
@@ -105,6 +119,11 @@
     -fx-background-insets: 0.75;   
 }
 
+
+/* ========================================= */
+/* Schedule List-View Styling */
+/* ========================================= */
+
 #scheduleListView 
 {
     -fx-control-inner-background: #243847;
@@ -135,6 +154,30 @@
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.45), 18, 0.45, 0, 4);
 }
 
+.list-view:not(:focused) .list-cell:filled:selected {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+}
+
+.list-view:not(:focused) .list-cell:filled:selected .text {
+    -fx-fill: -fx-text-inner-color;
+}
+
+.list-cell:drop-above {
+    -fx-border-color: #d4af37 transparent transparent transparent;
+    -fx-border-width: 2 0 0 0;
+}
+
+.list-cell:drop-below {
+    -fx-border-color: transparent transparent #d4af37 transparent;
+    -fx-border-width: 0 0 2 0;
+}
+
+
+/* ========================================= */
+/* Dialog Pane Styling (Alerts) */
+/* ========================================= */
+
 .dialog-pane {
     -fx-background-color: #1f2a36;
 }   
@@ -159,24 +202,10 @@
     -fx-text-fill: white;
 }
 
-.list-view:not(:focused) .list-cell:filled:selected {
-    -fx-background-color: transparent;
-    -fx-background-insets: 0;
-}
 
-.list-view:not(:focused) .list-cell:filled:selected .text {
-    -fx-fill: -fx-text-inner-color;
-}
-
-.list-cell:drop-above {
-    -fx-border-color: #d4af37 transparent transparent transparent;
-    -fx-border-width: 2 0 0 0;
-}
-
-.list-cell:drop-below {
-    -fx-border-color: transparent transparent #d4af37 transparent;
-    -fx-border-width: 0 0 2 0;
-}
+/* ========================================= */
+/* Toggle Button Styling */
+/* ========================================= */
 
 .toggle-button {
     -fx-padding: 0;
@@ -188,6 +217,7 @@
     -fx-faint-focus-color: transparent;
 }
 
+/* Styling for dashes on toggle list-view visible button */
 .dash-horizontal {
     -fx-background-color: white;
     -fx-background-radius: 1px;
@@ -204,6 +234,7 @@
     -fx-opacity: 1;           
 }
 
+/* Styling for edit icon on edit list-view toggle button*/
 .icon-toggle {
     -fx-background-color: #243847;
 }
@@ -219,3 +250,6 @@
     -fx-border-width: 2;
     -fx-border-radius: 6;
 }
+
+/* ========================================= */
+/* ========================================= */
