@@ -1,0 +1,5 @@
+# This is the git ignore file for the project
+# Place any files, file types ro folders in here that should remain local and not be pushed
+
+# Maven output
+target/

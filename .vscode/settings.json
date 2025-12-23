@@ -1,0 +1,8 @@
+{
+    "java.configuration.updateBuildConfiguration": "interactive",
+    "css.lint.vendorPrefix": "ignore",
+    "css.lint.unknownVendorSpecificProperties": "ignore",
+    "editor.codeLens": true,
+    "editor.referencesCodeLens": true,
+    "java.referencesCodeLens.enabled": true
+}

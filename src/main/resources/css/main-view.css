@@ -1,0 +1,221 @@
+/* This is the css file for the main-view fxml file */
+/* Classes and IDs can be set for UI elements in scene builder */
+/* Any inline styling done in fxml will take precedence over this file */
+
+.spinner .text-field 
+{
+    -fx-background-color:  #243847;
+    -fx-text-fill: #e6edf3;
+} 
+
+.spinner .increment-arrow-button,
+.spinner .decrement-arrow-button 
+{
+    -fx-background-color: #c9a24d;
+    -fx-background-insets: 0;
+}
+
+.spinner {
+    -fx-font-family: "Gill Sans Ultra Bold";
+    -fx-font-size: 16px;
+}
+
+.spinner .increment-arrow-button:hover,
+.spinner .decrement-arrow-button:hover 
+{
+    -fx-opacity: 0.92;
+}
+
+.spinner .increment-arrow-button:pressed,
+.spinner .decrement-arrow-button:pressed 
+{
+    -fx-translate-y: 1;
+    -fx-background-insets: 1;
+    -fx-opacity: 0.85;
+}
+
+.spinner:disabled .text-field:disabled {
+    -fx-opacity: 1.0;
+}
+
+.button 
+{
+    -fx-text-fill: #3eb9f2  ;
+    -fx-background-radius: 6;
+    -fx-background-insets: 0;
+}
+
+.button:hover 
+{
+    -fx-opacity: 0.92;
+}
+
+.button:pressed 
+{
+    -fx-translate-y: 1;
+    -fx-background-insets: 1;
+    -fx-opacity: 0.85;
+}
+
+.pagination .pagination-control .control-box .number-button,
+.pagination .left-arrow-button,
+.pagination .right-arrow-button 
+{
+    -fx-background-color: #c9a24d;
+    -fx-background-radius: 6;
+}
+
+.pagination .pagination-control .control-box .number-button 
+{
+     -fx-text-fill: #e6edf3;
+     -fx-font-weight: normal;
+}
+
+.pagination .label 
+{
+    -fx-opacity: 0;
+}
+
+.pagination .pagination-control .control-box .number-button:hover,
+.pagination .left-arrow-button:hover,
+.pagination .right-arrow-button:hover 
+{
+    -fx-opacity: 0.92;
+}
+
+.pagination .pagination-control .control-box .number-button:pressed,
+.pagination .left-arrow-button:pressed,
+.pagination .right-arrow-button:pressed 
+{
+    -fx-translate-y: 0.75;         
+    -fx-background-insets: 0.75;    
+    -fx-opacity: 0.85;
+}
+
+.pagination .pagination-control .control-box .number-button:pressed
+{
+    -fx-text-fill: #1b1f23;
+    -fx-font-weight: bold;
+}
+
+.pagination .pagination-control .control-box .number-button:selected 
+{
+    -fx-text-fill: #1b1f23;
+    -fx-font-weight: bold;
+    -fx-background-insets: 0.75;   
+}
+
+#scheduleListView 
+{
+    -fx-control-inner-background: #243847;
+    -fx-background-color: #243847;
+}
+
+#scheduleListView .list-cell 
+{
+    -fx-background-color: #243847;
+    -fx-text-fill: #3eb9f2;
+    -fx-alignment: center;
+    -fx-font-family: "Gill Sans Ultra Bold";
+    -fx-font-size: 16px;
+}
+
+#scheduleListView .list-cell:filled:selected 
+{
+    -fx-background-color: #2f4a60;
+}
+
+.list-view:edit-mode 
+{
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-border-color: rgba(255, 224, 130, 0.6);
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.45), 18, 0.45, 0, 4);
+}
+
+.dialog-pane {
+    -fx-background-color: #1f2a36;
+}   
+
+.dialog-pane .header-panel {
+    -fx-background-color: #2b3c4f;
+}
+
+.dialog-pane .header-panel .label {
+    -fx-text-fill: #5fd3ff;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.dialog-pane .content {
+    -fx-text-fill: #dbe4ee;
+    -fx-font-size: 14px;
+}
+
+.dialog-pane .button {
+    -fx-background-color: #2f4a60;
+    -fx-text-fill: white;
+}
+
+.list-view:not(:focused) .list-cell:filled:selected {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+}
+
+.list-view:not(:focused) .list-cell:filled:selected .text {
+    -fx-fill: -fx-text-inner-color;
+}
+
+.list-cell:drop-above {
+    -fx-border-color: #d4af37 transparent transparent transparent;
+    -fx-border-width: 2 0 0 0;
+}
+
+.list-cell:drop-below {
+    -fx-border-color: transparent transparent #d4af37 transparent;
+    -fx-border-width: 0 0 2 0;
+}
+
+.toggle-button {
+    -fx-padding: 0;
+    -fx-background-color: #243847;
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.dash-horizontal {
+    -fx-background-color: white;
+    -fx-background-radius: 1px;
+}
+
+.dash-vertical {
+    -fx-background-color: white;
+    -fx-background-radius: 1px;
+
+    -fx-opacity: 0;      
+}
+
+.toggle-button:selected .dash-vertical {
+    -fx-opacity: 1;           
+}
+
+.icon-toggle {
+    -fx-background-color: #243847;
+}
+
+.icon-toggle .edit-icon {
+    -fx-fill: white;
+}
+
+.icon-toggle:selected {
+    -fx-background-color: #243847;
+    -fx-border-color: rgba(255, 224, 130, 0.7);
+    -fx-border-width: 1;;   
+    -fx-border-width: 2;
+    -fx-border-radius: 6;
+}

@@ -1,0 +1,113 @@
+package data_classes;
+
+import java.util.ArrayList;
+
+/**
+ * This class represents the long term attributes and behaviour of a schedule
+ * All creational logic belongs to the schedule builder which constructs schedules
+ * There is generally only 1 schedule instance at a time
+ * @author William Shaw
+ */
+public class Schedule 
+{
+    private ArrayList<Game> games; // List of games
+	int numGamesInFullRound;       // The number of games in a full round
+	
+	/**
+	 * Constructor
+	 * Called by the schedule builder once the schedule builder has produced a list of games
+	 * @param games List of games
+	 * @param numGamesInFullRound The number of games in a full round
+	 */
+	public Schedule(ArrayList<Game> games, int numGamesInFullRound)
+	{
+		this.games = games;
+		this.numGamesInFullRound = numGamesInFullRound;
+	}
+
+	/**
+	 * Gets all games in a given round by round index
+	 * The round could be full or partial
+	 * @param roundIndex The index of the round being requested
+	 * @return A list of games in a single round to be displayed
+	 */
+	public ArrayList<Game> getGamesInRound(int roundIndex)
+	{
+		int startIndex = roundIndex * numGamesInFullRound;
+		if(startIndex >= games.size())
+			return new ArrayList<>();
+		int endIndex = startIndex + numGamesInFullRound;
+		endIndex = Math.min(endIndex, games.size());
+		ArrayList<Game> gamesInRound = new ArrayList<>(games.subList(startIndex, endIndex));
+		return gamesInRound;
+	}
+
+	/**
+	 * Gets the number of rounds in the schedule
+	 * @return The number of rounds
+	 */
+	public int getNumRounds()
+	{
+		if(games.size() % numGamesInFullRound == 0)
+			return games.size() / numGamesInFullRound;
+		else
+			return (games.size() / numGamesInFullRound) + 1;
+	}
+
+	/**
+	 * Getter for the number of games in a full round
+	 * @return The number of games in a full round
+	 */
+	public int getNumGamesInFullRound()
+	{
+		return numGamesInFullRound;
+	}
+
+	/**
+	 * Changes the index of a game in the schedule
+	 * Used to reorder the schedule
+	 * @param oldIndex The old index of the game 
+	 * @param newIndex The new index where the game will go
+	 */
+	public void changeGameIndex(int oldIndex, int newIndex)
+	{
+		Game game = games.remove(oldIndex);
+		if(newIndex > oldIndex)
+			newIndex--;
+		games.add(newIndex, game);
+	}	
+
+	/**
+	 * Clears the schedule
+	 */
+	public void clear()
+	{
+		games.clear();
+	}
+
+	/**
+	 * Checks if the schedule is empty
+	 * @return True if empty, false otherwise
+	 */
+	public boolean isEmpty()
+	{
+		return games.isEmpty();
+	}
+	
+	/**
+	 * Prints the list of games out to a terminal
+	 * Used for testing the schedule builder with terminal testing
+	 */
+	public void printGames()
+	{
+		int roundNumber = 1;
+		System.out.println("Round 1: ");
+		System.out.println(games.get(0));
+		for(int i = 1; i < games.size(); i++)
+		{
+			if(i % numGamesInFullRound == 0)
+				System.out.println("\nRound " + ++roundNumber + ":");
+			System.out.println(games.get(i));
+		}
+	}
+}
