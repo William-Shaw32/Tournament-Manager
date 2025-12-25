@@ -112,6 +112,8 @@ public class MainController
             if (schedule != null) schedule.clear();
             scheduleListView.getItems().clear();
             generateScheduleButton.setText("Generate");
+            numGamesRemaining = 0;
+            numGamesRemainingLabel.setText(Integer.toString(numGamesRemaining));
             MainControllerUtilities.createBasicAlert(
                 Alert.AlertType.ERROR, "Error", 
                 "Cannot generate schedule", 
@@ -124,6 +126,8 @@ public class MainController
         schedule = sb.build(); 
         displayRound();  
         MainControllerUtilities.resizeSchedule(scheduleListView, rightVBox, rightTopVBox, roundsPagination, paginationVSpacer);
+        numGamesRemaining = (players.size() * numGamesEach) / 2;
+        numGamesRemainingLabel.setText(Integer.toString(numGamesRemaining));
         if(hideScheduleToggle.isSelected())
         {
             int numGamesTotal = (players.size() * numGamesEach) / 2;
@@ -216,8 +220,6 @@ public class MainController
         }
         tournamentIsActive = true;
         startEndTournamentButton.setText("End Tournament");
-        numGamesRemaining = (players.size() * numGamesEach) / 2;
-        numGamesRemainingLabel.setText(Integer.toString(numGamesRemaining));
         scheduleConfigHBox.setDisable(true);
     }
 
