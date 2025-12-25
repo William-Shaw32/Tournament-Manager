@@ -114,6 +114,7 @@ public class MainController
             generateScheduleButton.setText("Generate");
             numGamesRemaining = 0;
             numGamesRemainingLabel.setText(Integer.toString(numGamesRemaining));
+            roundsPagination.setPageCount(Pagination.INDETERMINATE);
             MainControllerUtilities.createBasicAlert(
                 Alert.AlertType.ERROR, "Error", 
                 "Cannot generate schedule", 
@@ -128,6 +129,7 @@ public class MainController
         MainControllerUtilities.resizeSchedule(scheduleListView, rightVBox, rightTopVBox, roundsPagination, paginationVSpacer);
         numGamesRemaining = (players.size() * numGamesEach) / 2;
         numGamesRemainingLabel.setText(Integer.toString(numGamesRemaining));
+        roundsPagination.setPageCount(schedule.getNumRounds());
         if(hideScheduleToggle.isSelected())
         {
             int numGamesTotal = (players.size() * numGamesEach) / 2;
@@ -245,6 +247,7 @@ public class MainController
         numGamesRemainingLabel.setText("0");
         generateScheduleButton.setText("Generate");
         scheduleConfigHBox.setDisable(false);
+        roundsPagination.setPageCount(Pagination.INDETERMINATE);
     }
 
 
