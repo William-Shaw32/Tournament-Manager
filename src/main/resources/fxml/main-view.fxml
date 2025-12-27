@@ -35,7 +35,7 @@
                <children>
                   <Label fx:id="bannerLabel" alignment="CENTER" prefHeight="95.0" prefWidth="1476.0" text="Tournament Master 2" textFill="#3eb9f2">
                      <font>
-                        <Font name="Gill Sans Ultra Bold" size="48.0" />
+                        <Font name="Gill Sans Ultra Bold" size="40.0" />
                      </font>
                   </Label>
                   <ImageView fx:id="bannerImage" fitHeight="91.0" fitWidth="200.0" pickOnBounds="true">
