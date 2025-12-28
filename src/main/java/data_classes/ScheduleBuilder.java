@@ -15,7 +15,6 @@ public class ScheduleBuilder
 	private ArrayList<Schedulee> schedulees = new ArrayList<>();            // List of schedulees
 	private ArrayList<Match> uniqueMatches = new ArrayList<>();             // List of all unique matches
 	private ArrayList<Match> scheduledMatches = new ArrayList<>();          // List of scheduled matches (Accumulates as rounds are scheduled)
-	private ArrayList<Match> matchesLeftInRound = new ArrayList<>();        // List of unique matches left to be scheduled in a given round
 	private ArrayList<Game> scheduledGames = new ArrayList<>();             // List of scheduled games (Converted from matches)
 	private HashMap<Schedulee, Player> scheduleeToPlayer = new HashMap<>(); // Maps schedulees back to players
 	
@@ -33,7 +32,8 @@ public class ScheduleBuilder
 	 */
 	private class Schedulee
 	{
-		private String name;            // Player name
+		@SuppressWarnings("unused")
+		private String name;            // Player name (For debugging only)
 		private int numMatchesIn = 0;   // The number of matches the schedulee has been scheduled in already (Greedy heuristic)
 		private int lastMatchIndex = 0; // THe index of the last match the schedulee was scheduled in (Greedy heuristic)
 		
@@ -45,18 +45,7 @@ public class ScheduleBuilder
 		{
 			this.name = name;
 		}
-
-		/**
-		 * 
-		 * @param copy Another schedulee
-		 */
-		private Schedulee(Schedulee copy)
-		{
-			this.name = copy.name;
-			this.numMatchesIn = copy.numMatchesIn;
-			this.lastMatchIndex = copy.lastMatchIndex;
-		}
-	}
+	}	
 	
 	/**
 	 * Private Inner Class Match
@@ -101,12 +90,25 @@ public class ScheduleBuilder
 		/**
 		 * Updates the schedulee info after a match is scheduled
 		 */
-		public void updateScheduleeInfoAfterRemoval(int matchIndexParam)
+		public void updateScheduleeInfoAfterRemoval()
 		{
 			scheduleeA.numMatchesIn++;
 			scheduleeB.numMatchesIn++;
-			scheduleeA.lastMatchIndex = matchIndexParam;
-			scheduleeB.lastMatchIndex = matchIndexParam;
+			scheduleeA.lastMatchIndex = matchIndex;
+			scheduleeB.lastMatchIndex = matchIndex;
+		}
+
+		/**
+		 * Undoes the schedulee info after backtracking (Partial round only)
+		 * @param oldLastMatchIndexA
+		 * @param oldLastMatchIndexB
+		 */
+		public void undoScheduleeInfoAfterRemoval(int oldLastMatchIndexA, int oldLastMatchIndexB)
+		{
+			scheduleeA.numMatchesIn--;
+			scheduleeB.numMatchesIn--;
+			scheduleeA.lastMatchIndex = oldLastMatchIndexA;
+			scheduleeB.lastMatchIndex = oldLastMatchIndexB;
 		}
 	}
 	
@@ -145,7 +147,7 @@ public class ScheduleBuilder
 	 */
 	public Schedule build()
 	{
-		createMatches(schedulees);
+		createMatches();
 		scheduleAllRounds();
 		convertToGames();
 		// Final built schedule
@@ -156,15 +158,15 @@ public class ScheduleBuilder
 	/**
 	 * Private helper to create a list of all unique matches
 	 */
-	private void createMatches(ArrayList<Schedulee> scheduleesParam)
+	private void createMatches()
 	{
 		uniqueMatches.clear();
 		// Enumerates unique matches (nC2)
-		for(int i = 0; i < scheduleesParam.size(); i++)
+		for(int i = 0; i < schedulees.size(); i++)
 		{
-			for(int j = i + 1; j < scheduleesParam.size(); j++)
+			for(int j = i + 1; j < schedulees.size(); j++)
 			{
-				uniqueMatches.add(new Match(scheduleesParam.get(i), scheduleesParam.get(j)));
+				uniqueMatches.add(new Match(schedulees.get(i), schedulees.get(j)));
 			}
 		}
 	}
@@ -179,12 +181,8 @@ public class ScheduleBuilder
 		{
 			scheduleFullRound();
 		}
-		boolean partialRoundScheduled = false;
-		while(partialRoundScheduled == false)
-		{
-			// Schedules final partial round
-			partialRoundScheduled = schedulePartialRound();
-		}
+		schedulePartialRound();
+	
 	}
 
 	/**
@@ -192,77 +190,119 @@ public class ScheduleBuilder
 	 */
 	private void scheduleFullRound()
 	{
-		Collections.shuffle(uniqueMatches); // Randomization
-		// List of unique matches left to be scheduled in a given round (Shrinks with each iteration)
-		matchesLeftInRound = new ArrayList<>(uniqueMatches); 
-		for(int i = 0; i < numGamesInFullRound; i++)
+		// Candidate matches in a round. Shrinks as matches are scheduled
+		ArrayList<Match> candidateMatches = new ArrayList<>(uniqueMatches); 
+		// Randomization
+		Collections.shuffle(candidateMatches);
+		// Recursively schedules the next match (Retuns true if successful, false if unsuccessful)
+		boolean success = scheduleNextMatch(0, numGamesInFullRound, candidateMatches);
+		// Fails loudly if the full round could not be scheduled
+		if(!success)
 		{
-			Match bestMatch = selectBestMatch(); // Best match out of the remaining unique matches
-			scheduledMatches.add(bestMatch);
-			matchIndex++;
-			bestMatch.updateScheduleeInfoAfterRemoval(matchIndex);
+			System.err.println("Schedule full round failed");
+			System.exit(1);	
 		}
 	}
 	
 	/**
 	 * Private helper to schedule the partial round
-	 * @return True if the partial round was scheduled successfully, false if it got stuck
 	 */
-	private boolean schedulePartialRound()
+	private void schedulePartialRound()
 	{
-		HashMap<Schedulee, Schedulee> copyToOriginal = new HashMap<>();
-		ArrayList<Schedulee> scheduleesCopy = deepCopySchedulees(schedulees, copyToOriginal); // Deep copies the schedulees list
-		createMatches(scheduleesCopy); 												// Recreates the set of unique matches
-		Collections.shuffle(uniqueMatches);
-		// List of unique matches left to be scheduled in a given round (Shrinks with each iteration)
-		matchesLeftInRound = new ArrayList<>(uniqueMatches); 
-		ArrayList<Match> potentialMatches = new ArrayList<>();
-		int tempMatchIndex = matchIndex;
-		for(int i = 0; i < numGamesInPartialRound; i++)
+		// Candidate matches in a round. Shrinks as matches are scheduled
+		ArrayList<Match> candidateMatches = new ArrayList<>(uniqueMatches); 
+		// Randomization
+		Collections.shuffle(candidateMatches);
+		// Recursively schedules the next match (Retuns true if successful, false if unsuccessful)
+		boolean success = scheduleNextMatch(0, numGamesInPartialRound, candidateMatches);
+		// Fails loudly if the partial round could not be sceduled
+		if(!success)
 		{
-			// Checks if the algorithm has gotten stuck
-			if(matchesLeftInRound.isEmpty())
-				return false;
-			Match bestMatch = selectBestMatch(); // Best match out of the remaining unique matches
-			potentialMatches.add(bestMatch);
-			tempMatchIndex++;
-			bestMatch.updateScheduleeInfoAfterRemoval(tempMatchIndex);
-			// Prunes matches left in pool for schedulees who are finished in a partial round
+			System.err.println("Schedule partial round failed");
+			System.exit(1);		
+		}
+	}
+
+
+	/**
+	 * Recursive method to schedule the next match
+	 * Backtracks in the partial round when the algorithm gets stuck
+	 * Never needs to backtrack when scheduling a full round
+	 * @param numGamesScheduled Counts the number of games scheduled so far in the round
+	 * @param numGamesInRound numGamesInFullRound or numGamesInPartialRound depending on round type
+	 * @param candidateMatches Candidate matches in a round. Shrinks as matches are scheduled
+	 * @return True if a match was scheduled, false if backtracking is necessary
+	 */
+	private boolean scheduleNextMatch(int numGamesScheduled, int numGamesInRound, ArrayList<Match> candidateMatches)
+	{
+		// Base case: Returns true when all games have been scheduled successfully
+		if (numGamesScheduled == numGamesInRound)
+			return true;
+
+		// Local list of tried matches in a single recursion frame
+		ArrayList<Match> triedMatches = new ArrayList<>();
+
+		// Loops through all candidate matches in each recursion frame if necessary (Only continues looping when best matche is invalid)
+		while (candidateMatches.size() > 0)
+		{
+			Match bestMatch = selectBestMatch(candidateMatches); // Finds the best match from the candidate matches
+			// Removes the best match from the candidates list since it has been used
+			candidateMatches.remove(bestMatch); 
+			// Adds the best match to the local list of tried matches                  
+			triedMatches.add(bestMatch); 
+			// Continues to get a new best match if the best match is invalid
 			if(bestMatch.scheduleeA.numMatchesIn >= numGamesEach)
-			pruneMatchesForSchedulee(bestMatch.scheduleeA);
+				continue;
 			if(bestMatch.scheduleeB.numMatchesIn >= numGamesEach)
-			pruneMatchesForSchedulee(bestMatch.scheduleeB);	
+				continue;
+			// Saves the old last match indices before commiting the best match
+			int oldLastMatchIndexA = bestMatch.scheduleeA.lastMatchIndex;
+			int oldLastMatchIndexB = bestMatch.scheduleeB.lastMatchIndex;
+			// Commits the best match (Could still be changed in the future through backtracking)
+        	scheduledMatches.add(bestMatch);
+        	matchIndex++;
+        	bestMatch.updateScheduleeInfoAfterRemoval();
+			// Recursively schedules the next match 
+			if (scheduleNextMatch(numGamesScheduled+1, numGamesInRound, candidateMatches))
+        		return true;
+			// BACKTRACKING NEEDED
+			// Removes the last scheduled match from the list of scheduled matches
+			scheduledMatches.remove(scheduledMatches.size() - 1);
+			// Decrements the match index
+			matchIndex--;
+			// Undoes the updates to the schedulee info once the match is uncommited
+			bestMatch.undoScheduleeInfoAfterRemoval(oldLastMatchIndexA, oldLastMatchIndexB);
 		}
-		// Maps schedulee copies back to the originals and adds new matches to the list of matches
-		for (int i = 0; i < potentialMatches.size(); i++)
-		{
-    		Schedulee originalA = copyToOriginal.get(potentialMatches.get(i).scheduleeA);
-    		Schedulee originalB = copyToOriginal.get(potentialMatches.get(i).scheduleeB);
-    		scheduledMatches.add(new Match(originalA, originalB));
-		}
-		matchIndex = tempMatchIndex; // Commits the tempMatchIndex as the matchIndex
-		return true;
+
+		// Adds all tried matches back to the candidate matches list before backtracking 
+    	for (int i = 0; i < triedMatches.size(); i++)
+    	{
+        	candidateMatches.add(triedMatches.get(i));
+    	}
+		
+		// Backtracks
+		return false;
 	}
 	
 	/**
 	 * Private helper to find the best next match. Greedy search function. Local Optimization
 	 * Prioritizes the matches with the lowest sum of numMatchesIn
 	 * Tie Breaks with the lowest sum of lastMatchIndex
+	 * @param candidateMatches Candidate matches in a round. Shrinks as matches are scheduled
 	 * @return Best next match
 	 */
-	private Match selectBestMatch()
+	private Match selectBestMatch(ArrayList<Match> candidateMatches)
 	{
-		Match bestMatch = matchesLeftInRound.get(0); // Replaced when better match found
-		int bestIndex = 0;
+		// The best match out of the candidate matches (initialized at match 0)
+		Match bestMatch = candidateMatches.get(0);
 		// Loops through all remaining matches
-		for(int i = 1; i < matchesLeftInRound.size(); i++)
+		for(int i = 1; i < candidateMatches.size(); i++)
 		{
-			Match candidateMatch = matchesLeftInRound.get(i);
+			Match candidateMatch = candidateMatches.get(i);
 			// Outer heuristic (Sum of matches scheduled)
 			if(candidateMatch.sumNumMatchesIn() < bestMatch.sumNumMatchesIn())
 			{
 				bestMatch = candidateMatch;
-				bestIndex = i;
 			}
 			else if(candidateMatch.sumNumMatchesIn() == bestMatch.sumNumMatchesIn())
 			{
@@ -270,29 +310,11 @@ public class ScheduleBuilder
 				if(candidateMatch.sumLastMatchIndices() < bestMatch.sumLastMatchIndices())
 				{
 					bestMatch = candidateMatch;
-					bestIndex = i;
 				}
 			}
 		}
-		matchesLeftInRound.remove(bestIndex); // Removes the scheduled match
-		return bestMatch;
-	}
-
-	/**
-	 * Private helper to prune matches from players who are finished all their matches in the partial round
-	 * @param schedulee The schedulee who is finished all their matches
-	 */
-	private void pruneMatchesForSchedulee(Schedulee schedulee)
-	{
-    	for (int i = matchesLeftInRound.size() - 1; i >= 0; i--)
-    	{
-        	Match match = matchesLeftInRound.get(i);
-        	if (match.scheduleeA == schedulee || match.scheduleeB == schedulee)
-        	{
-        	    matchesLeftInRound.remove(i);
-        	}
-    	}
-	}
+		return bestMatch;	
+	}	
 	
 	/**
 	 * Private helper to convert the list of scheduled matches into a list of scheduled games
@@ -309,24 +331,5 @@ public class ScheduleBuilder
 			Game game = new Game(playerA, playerB);
 			scheduledGames.add(game);
 		}
-	}
-
-	/**
-	 * Private helper to deep copy the list of schedulees
-	 * @param originals Original list of schedulees
-	 * @param copyToOriginal Map from the copies back to the originals
-	 * @return A new list of deep copied schedulees
-	 */
-	private ArrayList<Schedulee> deepCopySchedulees(ArrayList<Schedulee> originals, HashMap<Schedulee, Schedulee> copyToOriginal)
-	{
-		ArrayList<Schedulee> copies = new ArrayList<>(originals.size());
-		for(int i = 0; i < originals.size(); i++)
-		{
-			Schedulee original = originals.get(i);
-			Schedulee copy = new Schedulee(original);
-			copies.add(copy);
-			copyToOriginal.put(copy, original);
-		}
-		return copies;
 	}
 }
