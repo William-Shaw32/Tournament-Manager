@@ -79,11 +79,7 @@ public class MainControllerUtilities
      */
     private static void commitSpinner(Spinner<Integer> gamesEachSpinner, Button generateScheduleButton)
     {
-        String text = gamesEachSpinner.getEditor().getText();
-        if (text == null || text.isEmpty()) 
-            gamesEachSpinner.getValueFactory().setValue(1);
-        else 
-            gamesEachSpinner.increment(0);
+        gamesEachSpinner.increment(0);
         gamesEachSpinner.getEditor().setText(
                 String.valueOf(gamesEachSpinner.getValue()));
     }
