@@ -1,6 +1,7 @@
 package Utilities;
 
 import data_classes.Game;
+import data_classes.Player;
 import javafx.application.Platform;
 import javafx.css.PseudoClass;
 import javafx.scene.Node;
@@ -23,17 +24,18 @@ public class MainControllerUtilities
      * @param gamesEachSpinner The games each spinner UI element
      * @param root             The root stackpane UI element
      */
-    public static void configureGamesEachSpinner(int numPlayers, Spinner<Integer> gamesEachSpinner, StackPane root, Button generateScheduleButton)
+    public static void configureGamesEachSpinner(Spinner<Integer> gamesEachSpinner, StackPane root, Button generateScheduleButton)
     {
-        Integer defaultValue = numPlayers - 1;
-
         SpinnerValueFactory.IntegerSpinnerValueFactory vf =
                 new SpinnerValueFactory.IntegerSpinnerValueFactory(
-                        1, Integer.MAX_VALUE, defaultValue
+                        1, Integer.MAX_VALUE, 0
                 );
 
         gamesEachSpinner.setValueFactory(vf);
         gamesEachSpinner.setEditable(true);
+        gamesEachSpinner.getEditor().clear();
+        gamesEachSpinner.setDisable(true);
+        generateScheduleButton.setDisable(true);
         
         TextFormatter<String> formatter = new TextFormatter<>(change ->
                 change.getControlNewText().matches("\\d*") ? change : null
@@ -217,7 +219,42 @@ public class MainControllerUtilities
         int itemCount = scheduleListView.getItems().size();
         double buffer = 4;
         double contentHeight = scheduleListView.getFixedCellSize() * itemCount + buffer;
-        double cappedHeight = Math.min(contentHeight, availableHeight);
+        double cappedHeight = Math.min(contentHeight, availableHeight); 
         scheduleListView.setPrefHeight(cappedHeight);
     } 
+
+    public static void resizePlayersTable(TableView<Player> playersTableView, VBox rightVBox, VBox rightTopVBox)
+    {
+        if (playersTableView.getItems().isEmpty())
+            return;
+
+        double availableHeight =
+                rightVBox.getHeight()
+                - rightTopVBox.getHeight()
+                - rightVBox.getSpacing()          
+                - 4;
+
+        resizePlayersTableToContent(playersTableView, availableHeight);
+    }
+
+    public static void resizePlayersTableToContent(TableView<Player> playersTableView, double availableHeight)
+    {
+        int itemCount = playersTableView.getItems().size();
+        double rowHeight = playersTableView.getFixedCellSize();
+        if (rowHeight <= 0)
+            return;
+        double buffer = 4;
+        double headerHeight = getPlayersTableHeaderHeight(playersTableView);
+        double contentHeight = headerHeight + rowHeight * itemCount + buffer;
+        double cappedHeight = Math.min(contentHeight, availableHeight);
+        playersTableView.setPrefHeight(cappedHeight);
+    }
+
+    private static double getPlayersTableHeaderHeight(TableView<Player> playersTableView)
+    {
+        Node header = playersTableView.lookup(".column-header-background");
+        if (header == null)
+            return 0;
+        return header.getBoundsInLocal().getHeight();
+    }
 }

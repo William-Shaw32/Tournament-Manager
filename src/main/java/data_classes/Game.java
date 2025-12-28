@@ -30,6 +30,16 @@ public class Game
         	this.playerB = playerA;
     	}
 	}
+
+	public Player getPlayerA()
+	{
+		return playerA;
+	}
+
+	public Player getPlayerB()
+	{
+		return playerB;
+	}
 	
 	/**
 	 * Overide of the toString() method

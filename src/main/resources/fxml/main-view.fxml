@@ -11,6 +11,8 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Pagination?>
 <?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -21,17 +23,55 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.shape.SVGPath?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.control.cell.TextFieldTableCell?>
 
 <StackPane fx:id="root" stylesheets="@../css/main-view.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MainController">
    <children>
       <HBox fx:id="mainHBox" alignment="CENTER" prefHeight="1044.0" prefWidth="1707.0" style="-fx-background-color: #1b1f23;" StackPane.alignment="TOP_CENTER">
          <children>
-            <VBox fx:id="leftVBox" minWidth="500.0" prefHeight="1044.0" prefWidth="500.0">
+            <VBox fx:id="leftVBox" alignment="TOP_CENTER" minWidth="400.0" prefHeight="1044.0" prefWidth="500.0">
                <padding>
                   <Insets left="24.0" />
                </padding>
+               <children>
+                  <VBox fx:id="leftTopVBox" alignment="TOP_CENTER" prefHeight="209.0" prefWidth="376.0">
+                     <children>
+                        <Region prefHeight="40.0" prefWidth="476.0" />
+                        <Label fx:id="playersLabel" text="Players" textFill="#3eb9f2">
+                           <font>
+                              <Font name="Gill Sans Ultra Bold" size="28.0" />
+                           </font>
+                        </Label>
+                        <Region prefHeight="57.0" prefWidth="376.0" />
+                        <Button fx:id="addPlayerButton" mnemonicParsing="false" onAction="#addPlayer" prefHeight="50.0" prefWidth="150.0" style="-fx-background-color: #243847;" text="Add Player" textFill="#3eb9f2">
+                           <font>
+                              <Font name="Gill Sans Ultra Bold" size="16.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </VBox>
+                  <VBox fx:id="leftCenterVBox" prefWidth="476.0">
+                     <children>
+                        <TableView fx:id="playersTableView" editable="true" fixedCellSize="72.0" prefHeight="400.0" prefWidth="476.0" style="-fx-background-color: #243847;">
+                           <placeholder>
+                              <Label text="" />
+                           </placeholder>
+                          <columns>
+                            <TableColumn fx:id="nameColumn" prefWidth="75.0" sortable="false" text="Name" editable="true" onEditCommit="#onNameEditCommit">
+                              <cellFactory>
+                                 <TextFieldTableCell fx:factory="forTableColumn"/>
+                              </cellFactory>
+                            </TableColumn>
+                          </columns>
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
+                        </TableView>
+                     </children>
+                  </VBox>  
+               </children>
             </VBox>
-            <VBox fx:id="centerVBox" alignment="CENTER" prefHeight="1044.0" prefWidth="1587.0">
+            <VBox fx:id="centerVBox" alignment="CENTER" prefHeight="1044.0" prefWidth="1180.0">
                <children>
                   <Label fx:id="bannerLabel" alignment="CENTER" prefHeight="95.0" prefWidth="1476.0" text="Tournament Master 2" textFill="#3eb9f2">
                      <font>
@@ -69,87 +109,78 @@
                   </HBox>
                </children>
             </VBox>
-            <VBox fx:id="rightVBox" alignment="TOP_CENTER" minWidth="500.0" prefWidth="500.0">
+            <VBox fx:id="rightVBox" alignment="TOP_CENTER" minWidth="400.0" prefWidth="500.0">
                <children>
-                  <HBox fx:id="rightHBox" prefWidth="67.0">
+                  <VBox fx:id="rightTopVBox" prefHeight="231.0" prefWidth="341.0">
                      <children>
-                        <Region fx:id="rightSpacer" prefHeight="1045.0" prefWidth="523.0" />
-                        <VBox fx:id="rightVBoxContent" prefWidth="727.0">
+                        <Region prefHeight="40.0" prefWidth="321.0" />
+                        <HBox alignment="CENTER_RIGHT" prefHeight="15.0" prefWidth="341.0">
                            <children>
-                              <VBox fx:id="rightTopVBox" prefHeight="231.0" prefWidth="341.0">
-                                 <children>
-                                    <Region prefHeight="37.0" prefWidth="321.0" />
-                                    <HBox alignment="CENTER_RIGHT" prefHeight="15.0" prefWidth="341.0">
-                                       <children>
-                                          <Label alignment="CENTER" prefHeight="55.0" prefWidth="191.0" text="Schedule" textFill="#3eb9f2">
-                                             <font>
-                                                <Font name="Gill Sans Ultra Bold Condensed" size="36.0" />
-                                             </font>
-                                          </Label>
-                                          <Region prefHeight="86.0" prefWidth="29.0" />
-                                          <ToggleButton fx:id="hideScheduleToggle" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0" maxHeight="22" maxWidth="28" minHeight="22" minWidth="28" onAction="#toggleHideSchedule" prefHeight="22" prefWidth="28" text="">
-                                             <graphic>
-                                                <StackPane alignment="CENTER" maxHeight="22" maxWidth="28" minHeight="22" minWidth="28" prefHeight="22" prefWidth="28">
-                                                      <Region maxHeight="2" maxWidth="12" minHeight="2" minWidth="12" prefHeight="2" prefWidth="12" styleClass="dash-horizontal" />
-                                                      <Region maxHeight="12" maxWidth="2" minHeight="12" minWidth="2" prefHeight="12" prefWidth="2" styleClass="dash-vertical" />
-                                                </StackPane>
-                                             </graphic>
-                                          </ToggleButton>
-                                          <Region prefHeight="86.0" prefWidth="18.0" />
-                                       </children>
-                                    </HBox>
-                                    <Region prefHeight="20.0" prefWidth="321.0" />
-                                    <HBox fx:id="scheduleConfigHBox" prefHeight="59.0" prefWidth="341.0">   
-                                       <children>
-                                          <Label prefHeight="45.0" prefWidth="75.0" text="Games Each" textFill="#3eb9f2" wrapText="true">
-                                             <font>
-                                                <Font name="Gill Sans Ultra Bold" size="14.0" />
-                                             </font>
-                                          </Label>
-                                          <Spinner fx:id="gamesEachSpinner" editable="true" prefHeight="45.0" prefWidth="83.0" />
-                                          <Region prefHeight="134.0" prefWidth="18.0" />
-                                          <Button fx:id="generateScheduleButton" mnemonicParsing="false" onAction="#generateSchedule" prefHeight="50.0" prefWidth="150.0" style="-fx-background-color: #243847;" styleClass="generate-button" text="Generate" textFill="#3eb9f2">
-                                             <font>
-                                                <Font name="Gill Sans Ultra Bold" size="16.0" />
-                                             </font>
-                                          </Button>
-                                       </children>
-                                    </HBox>
-                                    <HBox fx:id="roundsHBox" alignment="CENTER_LEFT" prefHeight="61.0" prefWidth="321.0">
-                                       <children>
-                                          <Region prefHeight="48.0" prefWidth="10.0" />
-                                          <Label alignment="CENTER_RIGHT" prefHeight="314.0" prefWidth="186.0" text="Round" textFill="#3eb9f2">
-                                             <font>
-                                                <Font name="Gill Sans Ultra Bold" size="24.0" />
-                                             </font>
-                                          </Label>
-                                          <Region prefHeight="100.0" prefWidth="15.0" />
-                                          <Label fx:id="roundNumLabel" prefHeight="48.0" prefWidth="23.0" text="n" textFill="#3eb9f2">
-                                             <font>
-                                                <Font name="Gill Sans Ultra Bold" size="24.0" />
-                                             </font>
-                                          </Label>
-                                          <Region prefHeight="53.0" prefWidth="57.0" />
-                                          <ToggleButton fx:id="editScheduleToggle" onAction="#toggleEditSchedule" prefHeight="22.0" prefWidth="28.0" styleClass="icon-toggle" text="">
-                                             <graphic>
-                                                <SVGPath content="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z" styleClass="edit-icon" />
-                                             </graphic>
-                                          </ToggleButton>
-                                       </children>
-                                    </HBox>
-                                 </children>
-                              </VBox>
-                              <VBox fx:id="rightCenterVBox" prefWidth="341.0" VBox.vgrow="NEVER">
-                                 <children>
-                                    <ListView id="scheduleListView" fx:id="scheduleListView" maxHeight="1.7976931348623157E308" prefWidth="341.0" style="-fx-background-color: #243847;" VBox.vgrow="ALWAYS" />
-                                    <Region fx:id="paginationVSpacer" prefHeight="24.0" prefWidth="321.0" />
-                                    <Pagination fx:id="roundsPagination" maxPageIndicatorCount="3" prefHeight="0.0" prefWidth="321.0" />
-                                 </children>
-                              </VBox>
+                              <Label alignment="CENTER" prefHeight="35.0" prefWidth="215.0" text="Schedule" textFill="#3eb9f2">
+                                 <font>
+                                    <Font name="Gill Sans Ultra Bold" size="28.0" />
+                                 </font>
+                              </Label>
+                              <Region prefHeight="86.0" prefWidth="29.0" />
+                              <ToggleButton fx:id="hideScheduleToggle" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0" maxHeight="22" maxWidth="28" minHeight="22" minWidth="28" onAction="#toggleHideSchedule" prefHeight="22" prefWidth="28" text="">
+                                 <graphic>
+                                    <StackPane alignment="CENTER" maxHeight="22" maxWidth="28" minHeight="22" minWidth="28" prefHeight="22" prefWidth="28">
+                                          <Region maxHeight="2" maxWidth="12" minHeight="2" minWidth="12" prefHeight="2" prefWidth="12" styleClass="dash-horizontal" />
+                                          <Region maxHeight="12" maxWidth="2" minHeight="12" minWidth="2" prefHeight="12" prefWidth="2" styleClass="dash-vertical" />
+                                    </StackPane>
+                                 </graphic>
+                              </ToggleButton>
+                              <Region prefHeight="86.0" prefWidth="18.0" />
                            </children>
-                        </VBox>
+                        </HBox>
+                        <Region prefHeight="20.0" prefWidth="321.0" />
+                        <HBox fx:id="scheduleConfigHBox" prefHeight="59.0" prefWidth="341.0">   
+                           <children>
+                              <Label prefHeight="45.0" prefWidth="75.0" text="Games Each" textFill="#3eb9f2" wrapText="true">
+                                 <font>
+                                    <Font name="Gill Sans Ultra Bold" size="14.0" />
+                                 </font>
+                              </Label>
+                              <Spinner fx:id="gamesEachSpinner" editable="true" prefHeight="45.0" prefWidth="83.0" />
+                              <Region prefHeight="59.0" prefWidth="53.0" />
+                              <Button fx:id="generateScheduleButton" mnemonicParsing="false" onAction="#generateSchedule" prefHeight="50.0" prefWidth="150.0" style="-fx-background-color: #243847;" styleClass="generate-button" text="Generate" textFill="#3eb9f2">
+                                 <font>
+                                    <Font name="Gill Sans Ultra Bold" size="16.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                        </HBox>
+                        <HBox fx:id="roundsHBox" alignment="CENTER_LEFT" prefHeight="61.0" prefWidth="321.0">
+                           <children>
+                              <Region prefHeight="48.0" prefWidth="10.0" />
+                              <Label alignment="CENTER_RIGHT" prefHeight="61.0" prefWidth="213.0" text="Round" textFill="#3eb9f2">
+                                 <font>
+                                    <Font name="Gill Sans Ultra Bold" size="24.0" />
+                                 </font>
+                              </Label>
+                              <Region prefHeight="100.0" prefWidth="15.0" />
+                              <Label fx:id="roundNumLabel" prefHeight="48.0" prefWidth="23.0" text="n" textFill="#3eb9f2">
+                                 <font>
+                                    <Font name="Gill Sans Ultra Bold" size="24.0" />
+                                 </font>
+                              </Label>
+                              <Region prefHeight="61.0" prefWidth="67.0" />
+                              <ToggleButton fx:id="editScheduleToggle" onAction="#toggleEditSchedule" prefHeight="22.0" prefWidth="28.0" styleClass="icon-toggle" text="">
+                                 <graphic>
+                                    <SVGPath content="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z" styleClass="edit-icon" />
+                                 </graphic>
+                              </ToggleButton>
+                           </children>
+                        </HBox>
                      </children>
-                  </HBox>
+                  </VBox>
+                  <VBox fx:id="rightCenterVBox" prefWidth="341.0" VBox.vgrow="NEVER">
+                     <children>
+                        <ListView id="scheduleListView" fx:id="scheduleListView" maxHeight="1.7976931348623157E308" prefWidth="341.0" style="-fx-background-color: #243847;" VBox.vgrow="ALWAYS" />
+                        <Region fx:id="paginationVSpacer" prefHeight="24.0" prefWidth="321.0" />
+                        <Pagination fx:id="roundsPagination" maxPageIndicatorCount="3" prefHeight="0.0" prefWidth="321.0" />
+                     </children>
+                  </VBox>
                </children>
                <padding>
                   <Insets right="24.0" />

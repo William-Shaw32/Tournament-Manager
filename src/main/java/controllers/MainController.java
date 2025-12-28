@@ -8,6 +8,7 @@ import data_classes.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.event.ActionEvent;
 
 /**
@@ -35,9 +36,14 @@ public class MainController
     @FXML private Button startEndTournamentButton;
     @FXML private Label numGamesRemainingLabel;
     @FXML private HBox scheduleConfigHBox;
+    @FXML private Button addPlayerButton;
+    @FXML private TableView<Player> playersTableView;
+    @FXML private TableColumn<Player, String> nameColumn;
+    @FXML private VBox leftVBox;
+    @FXML private VBox leftTopVBox;
 
     // Data objects
-    private ArrayList<Player> players;
+    private ArrayList<Player> players = new ArrayList<>();
     private Schedule schedule;  
 
     // Primatives
@@ -45,20 +51,7 @@ public class MainController
     private boolean tournamentIsActive = false;
     private int numGamesEach = 0;
     private int numGamesRemaining = 0;
-
-    /**
-     * This function initializes the players list with default values
-     * It is a temporary function and will be removed when the player leaderboard is added to the UI
-     */
-    private void initializePlayers()
-    {
-        players = new ArrayList<>();
-        players.add(new Player("Player 1"));
-        players.add(new Player("Player 2"));
-        players.add(new Player("Player 3"));
-        players.add(new Player("Player 4"));
-        players.add(new Player("Player 5")); 
-    }
+    private int numPlayers = 0;
 
     /**
      * This is the initialize functiton for the main controller
@@ -67,11 +60,11 @@ public class MainController
     @FXML
     private void initialize()
     {
-        // Initializes the list of players
-        initializePlayers();
+        playersTableView.setVisible(false);
+        startEndTournamentButton.setDisable(true);
+        root.setFocusTraversable(true);
         // Configures the behaviour of the ganes each spinner
-        MainControllerUtilities.configureGamesEachSpinner(
-            players.size(), 
+        MainControllerUtilities.configureGamesEachSpinner( 
             gamesEachSpinner, 
             root,
             generateScheduleButton);
@@ -91,6 +84,14 @@ public class MainController
             MainControllerUtilities.resizeSchedule(scheduleListView, rightVBox, rightTopVBox, roundsPagination, paginationVSpacer));
         // Makes the schedule list view draggable
         DragDropUtilities.configureDragDrop(scheduleListView, game -> new Label(game.toString()), this::reorderGame, dragDropEnabled);
+        // Configures the dynamic behaviour of the players table view
+        rightVBox.heightProperty().addListener((obs, o, n) ->
+            MainControllerUtilities.resizePlayersTable(playersTableView, rightVBox, rightTopVBox));
+        rightTopVBox.heightProperty().addListener((obs, o, n) ->
+            MainControllerUtilities.resizePlayersTable(playersTableView, rightVBox, rightTopVBox));
+        nameColumn.setCellValueFactory(cellData ->
+            new ReadOnlyObjectWrapper<>(cellData.getValue().getName())
+        );
     }
 
 
@@ -115,6 +116,7 @@ public class MainController
             numGamesRemaining = 0;
             numGamesRemainingLabel.setText(Integer.toString(numGamesRemaining));
             roundsPagination.setPageCount(Pagination.INDETERMINATE);
+            startEndTournamentButton.setDisable(true);
             MainControllerUtilities.createBasicAlert(
                 Alert.AlertType.ERROR, "Error", 
                 "Cannot generate schedule", 
@@ -130,6 +132,7 @@ public class MainController
         numGamesRemaining = (players.size() * numGamesEach) / 2;
         numGamesRemainingLabel.setText(Integer.toString(numGamesRemaining));
         roundsPagination.setPageCount(schedule.getNumRounds());
+        startEndTournamentButton.setDisable(false);
         if(hideScheduleToggle.isSelected())
         {
             int numGamesTotal = (players.size() * numGamesEach) / 2;
@@ -223,6 +226,7 @@ public class MainController
         tournamentIsActive = true;
         startEndTournamentButton.setText("End Tournament");
         scheduleConfigHBox.setDisable(true);
+        addPlayerButton.setDisable(true);
     }
 
     /**
@@ -247,7 +251,38 @@ public class MainController
         numGamesRemainingLabel.setText("0");
         generateScheduleButton.setText("Generate");
         scheduleConfigHBox.setDisable(false);
+        addPlayerButton.setDisable(false);
+        startEndTournamentButton.setDisable(true);
         roundsPagination.setPageCount(Pagination.INDETERMINATE);
+    }
+
+    @FXML
+    private void addPlayer()
+    {
+        playersTableView.setVisible(true);
+        numPlayers++;
+        Player newPlayer = new Player("Player " + numPlayers);
+        players.add(newPlayer);
+        playersTableView.getItems().add(newPlayer); 
+        MainControllerUtilities.resizePlayersTable(playersTableView, rightVBox, rightTopVBox); 
+        if(numPlayers >= 2)
+        {
+            gamesEachSpinner.getValueFactory().setValue(players.size()-1);
+            gamesEachSpinner.getEditor().setText(String.valueOf(players.size()-1));
+            gamesEachSpinner.setDisable(false);
+            generateScheduleButton.setDisable(false);
+        }
+    }
+
+    @FXML
+    private void onNameEditCommit(TableColumn.CellEditEvent<Player, String> e) 
+    {
+        System.out.println("This code is running");
+        Player player = e.getRowValue();
+        player.setName(e.getNewValue());
+        schedule.updatePlayerName(player);
+        playersTableView.refresh();
+        displayRound();
     }
 
 
@@ -257,7 +292,7 @@ public class MainController
     
 
     /**
-     * This function displays a single round to the screen =
+     * This function displays a single round to the screen 
      */
     private void displayRound()
     {

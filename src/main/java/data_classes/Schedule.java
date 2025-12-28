@@ -93,6 +93,19 @@ public class Schedule
 	{
 		return games.isEmpty();
 	}
+
+	public void updatePlayerName(Player player)
+	{
+		for(int i = 0; i < games.size(); i++)
+		{
+			Player playerA = games.get(i).getPlayerA();
+			Player playerB = games.get(i).getPlayerB();
+			if(player == playerA)
+				playerA.setName(player.getName());
+			else if(player == playerB)
+				playerB.setName(player.getName());
+		}
+	}
 	
 	/**
 	 * Prints the list of games out to a terminal

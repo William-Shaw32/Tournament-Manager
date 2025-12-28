@@ -49,7 +49,6 @@
 
 .button 
 {
-    -fx-text-fill: #3eb9f2  ;
     -fx-background-radius: 6;
     -fx-background-insets: 0;
 }
@@ -252,4 +251,56 @@
 }
 
 /* ========================================= */
-/* ========================================= */
+/* Table-view styling
+/* ========================================= */  
+
+/* Header background */
+.table-view .column-header-background 
+{
+    -fx-background-color: #1e2b36;
+}
+
+/* Individual header cells */
+.table-view .column-header 
+{
+    -fx-background-color: #1e2b36;
+}
+
+/* Header text */
+.table-view .column-header .label 
+{
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 0 0 0 48px;
+    -fx-text-fill: #3eb9f2;
+}
+
+/* Filler area to the right of last column */
+.table-view .filler 
+{
+    -fx-background-color: #1e2b36;
+    -fx-font-family: "Gill Sans Ultra Bold";
+}
+
+/* All table rows */
+.table-row-cell 
+{
+    -fx-font-family: "Gill Sans Ultra Bold";
+}
+
+.table-cell 
+{
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 0 0 0 35px;
+}
+
+.table-cell .text {
+    -fx-fill: #3eb9f2;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: white;
+}
+
+.table-view .text-field {
+    -fx-text-fill: #3eb9f2;
+}
