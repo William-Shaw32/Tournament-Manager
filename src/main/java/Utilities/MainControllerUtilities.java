@@ -39,8 +39,15 @@ public class MainControllerUtilities
                 change.getControlNewText().matches("\\d*") ? change : null
         );
         gamesEachSpinner.getEditor().setTextFormatter(formatter);
-
         
+        gamesEachSpinner.getEditor().textProperty().addListener((obs, oldText, newText) -> {
+            generateScheduleButton.setText("Generate");
+            if(newText == null || newText.isEmpty())
+                generateScheduleButton.setDisable(true);
+            else
+                generateScheduleButton.setDisable(false);
+        });
+
         gamesEachSpinner.getEditor().setOnAction(e -> {
             commitSpinner(gamesEachSpinner, generateScheduleButton);
             root.requestFocus();
@@ -72,11 +79,13 @@ public class MainControllerUtilities
      */
     private static void commitSpinner(Spinner<Integer> gamesEachSpinner, Button generateScheduleButton)
     {
-        gamesEachSpinner.increment(0);
+        String text = gamesEachSpinner.getEditor().getText();
+        if (text == null || text.isEmpty()) 
+            gamesEachSpinner.getValueFactory().setValue(1);
+        else 
+            gamesEachSpinner.increment(0);
         gamesEachSpinner.getEditor().setText(
-                String.valueOf(gamesEachSpinner.getValue())
-        );
-        generateScheduleButton.setText("Generate");
+                String.valueOf(gamesEachSpinner.getValue()));
     }
 
     /**
