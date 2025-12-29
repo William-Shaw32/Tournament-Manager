@@ -7,7 +7,9 @@ import javafx.css.PseudoClass;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.util.converter.DefaultStringConverter;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.TextFieldTableCell;
 
 /**
  * This class contains static utility functions to support the Main Controller class
@@ -256,5 +258,38 @@ public class MainControllerUtilities
         if (header == null)
             return 0;
         return header.getBoundsInLocal().getHeight();
+    }
+
+    public static void configureNameColumn(TableColumn<Player, String> nameColumn) 
+    {
+        nameColumn.setCellFactory(col ->
+            new TextFieldTableCell<Player, String>(new DefaultStringConverter()) {
+                private TextField textField;
+
+                private final javafx.beans.value.ChangeListener<Boolean> focusListener =
+                    (obs, had, has) -> {
+                        if (!has && isEditing() && textField != null) {
+                            commitEdit(textField.getText());
+                        }
+                    };
+                @Override
+                public void startEdit() {
+                    super.startEdit();
+
+                    if (getGraphic() instanceof TextField tf) {
+                        textField = tf;
+                        textField.focusedProperty().removeListener(focusListener);
+                        textField.focusedProperty().addListener(focusListener);
+                    }
+                }
+                @Override
+                public void cancelEdit() {
+                    super.cancelEdit();
+                    if (textField != null) {
+                        textField.focusedProperty().removeListener(focusListener);
+                    }
+                }
+            }
+        );
     }
 }

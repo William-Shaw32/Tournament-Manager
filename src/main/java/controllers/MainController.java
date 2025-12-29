@@ -84,6 +84,7 @@ public class MainController
             MainControllerUtilities.resizeSchedule(scheduleListView, rightVBox, rightTopVBox, roundsPagination, paginationVSpacer));
         // Makes the schedule list view draggable
         DragDropUtilities.configureDragDrop(scheduleListView, game -> new Label(game.toString()), this::reorderGame, dragDropEnabled);
+        MainControllerUtilities.configureNameColumn(nameColumn);
         // Configures the dynamic behaviour of the players table view
         rightVBox.heightProperty().addListener((obs, o, n) ->
             MainControllerUtilities.resizePlayersTable(playersTableView, rightVBox, rightTopVBox));
@@ -277,11 +278,12 @@ public class MainController
     @FXML
     private void onNameEditCommit(TableColumn.CellEditEvent<Player, String> e) 
     {
-        System.out.println("This code is running");
         Player player = e.getRowValue();
         player.setName(e.getNewValue());
-        schedule.updatePlayerName(player);
         playersTableView.refresh();
+        if(schedule == null || schedule.isEmpty())
+            return;
+        schedule.updatePlayerName(player);
         displayRound();
     }
 
