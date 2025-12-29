@@ -94,6 +94,11 @@ public class Schedule
 		return games.isEmpty();
 	}
 
+
+	/**
+	 * Updates all occurances of a player's name in the schedule
+	 * @param player The player whose name was changed
+	 */
 	public void updatePlayerName(Player player)
 	{
 		for(int i = 0; i < games.size(); i++)

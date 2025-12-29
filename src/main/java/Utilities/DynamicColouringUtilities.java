@@ -2,15 +2,24 @@ package utilities;
 
 import javafx.scene.paint.Color;
 
+/**
+ * This class handles dynamic colouring for the players table
+ * It uses the golden angle algorithm to generate a unique sequence of colours within minimal clashing
+ */
 public class DynamicColouringUtilities 
 {
-    private static final double SATURATION = 0.6;
-    private static final double BRIGHTNESS = 0.9;
-    private static final double OPACITY = 0.75;
+    private static final double SATURATION = 0.6;                                      // Constant saturation value
+    private static final double BRIGHTNESS = 0.9;                                      // Constant brightness value
+    private static final double OPACITY = 0.75;                                        // Constant opacity value
     private static final double GOLDEN_RATIO = (1.0 + Math.sqrt(5)) / 2.0;             // The golden ratio (Φ)
     private static final double GOLDEN_ANGLE = 360.0 / (GOLDEN_RATIO * GOLDEN_RATIO);  // The golden angle (≈ 137.5°)
-    private static final double INITIAL_HUE = Math.random() * 360.0;                                     // The initial hue
+    private static final double INITIAL_HUE = Math.random() * 360.0;                   // The initial hue (Randomized)
     
+    /**
+     * Generates the next colour in the sequence according to the golden angle algorithm
+     * @param n The number of colour generated so far
+     * @return The next colour in the sequence
+     */
     public static Color generateNextColour(int n)
     {
         double nextHue = (INITIAL_HUE + (n * GOLDEN_ANGLE)) % 360;

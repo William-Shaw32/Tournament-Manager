@@ -9,8 +9,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import utilities.*;
-import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.event.ActionEvent;
+import javafx.scene.paint.Color;
 
 /**
  * This is the main controller class for the main-view fxml file
@@ -40,6 +40,9 @@ public class MainController
     @FXML private Button addPlayerButton;
     @FXML private TableView<Player> playersTableView;
     @FXML private TableColumn<Player, String> nameColumn;
+    @FXML private TableColumn<Player, String> winsColumn;
+    @FXML private TableColumn<Player, String> playedColumn;
+    @FXML private TableColumn<Player, String> ratioColumn;
     @FXML private VBox leftVBox;
     @FXML private VBox leftTopVBox;
 
@@ -93,9 +96,8 @@ public class MainController
             MainControllerUtilities.resizePlayersTable(playersTableView, rightVBox, rightTopVBox));
         rightTopVBox.heightProperty().addListener((obs, o, n) ->
             MainControllerUtilities.resizePlayersTable(playersTableView, rightVBox, rightTopVBox));
-        nameColumn.setCellValueFactory(cellData ->
-            new ReadOnlyObjectWrapper<>(cellData.getValue().getName())
-        );
+        // Configures the players table columns (Particularily the refresh maping)
+        MainControllerUtilities.configureAllTableColumns(nameColumn, winsColumn, playedColumn, ratioColumn);
     }
 
 
@@ -260,14 +262,19 @@ public class MainController
         roundsPagination.setPageCount(Pagination.INDETERMINATE);
     }
 
+    /**
+     * This function is called when the user presses the add player button
+     * It creates an empty player with a dynamically generated colour
+     */
     @FXML
     private void addPlayer()
     {
         playersTableView.setVisible(true);
         numPlayers++;
-        Player newPlayer = new Player("Player " + numPlayers);
-        newPlayer.setColour(numColoursGenerated);
+        String name = "Player " + numPlayers;
+        Color colour = DynamicColouringUtilities.generateNextColour(numColoursGenerated);
         numColoursGenerated++;
+        Player newPlayer = new Player(name, colour);
         players.add(newPlayer);
         playersTableView.getItems().add(newPlayer); 
         MainControllerUtilities.resizePlayersTable(playersTableView, rightVBox, rightTopVBox); 
@@ -280,6 +287,11 @@ public class MainController
         }
     }
 
+    /**
+     * This function is called when the user commits a name to the name column in the players table
+     * It updates their name in the table and cascades to update their name in the schedule as well
+     * @param e
+     */
     @FXML
     private void onNameEditCommit(TableColumn.CellEditEvent<Player, String> e) 
     {

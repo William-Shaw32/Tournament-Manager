@@ -31,11 +31,19 @@ public class Game
     	}
 	}
 
+	/**
+	 * Getter for playerA
+	 * @return playerA
+	 */
 	public Player getPlayerA()
 	{
 		return playerA;
 	}
 
+	/**
+	 * Getter for playerB
+	 * @return playerB
+	 */
 	public Player getPlayerB()
 	{
 		return playerB;

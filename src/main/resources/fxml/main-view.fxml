@@ -62,9 +62,9 @@
                                  <TextFieldTableCell fx:factory="forTableColumn" />
                               </cellFactory>
                             </TableColumn>
-                              <TableColumn prefWidth="75.0" sortable="false" text="Wins" />
-                              <TableColumn prefWidth="75.0" sortable="false" text="Played" />
-                              <TableColumn prefWidth="75.0" sortable="false" text="Ratio" />
+                              <TableColumn fx:id="winsColumn" prefWidth="75.0" sortable="false" text="Wins" />
+                              <TableColumn fx:id="playedColumn" prefWidth="75.0" sortable="false" text="Played" />
+                              <TableColumn fx:id="ratioColumn" prefWidth="75.0" sortable="false" text="Ratio" />
                           </columns>
                            <columnResizePolicy>
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

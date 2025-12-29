@@ -1,16 +1,16 @@
 package data_classes;
 
 import javafx.scene.paint.Color;
-import utilities.DynamicColouringUtilities;
 
 public class Player 
 {
 	private String name;
 	private Color colour;
 	
-	public Player(String name)
+	public Player(String name, Color colour)
 	{
 		this.name = name;
+		this.colour = colour;
 	}
 	
 	public String getName()
@@ -26,10 +26,5 @@ public class Player
 	public Color getColour()
 	{
 		return colour;
-	}
-
-	public void setColour(int numColoursGenerated)
-	{
-		colour = DynamicColouringUtilities.generateNextColour(numColoursGenerated);	
 	}
 }

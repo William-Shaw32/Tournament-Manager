@@ -17,11 +17,11 @@ public class ScheduleBuilderTesting
     public static void main(String[] args)
     {
         ArrayList<Player> players = new ArrayList<>();
-        players.add(new Player("Player 1"));
-        players.add(new Player("Player 2"));
-        players.add(new Player("Player 3"));
-        players.add(new Player("Player 4"));
-        players.add(new Player("Player 5"));
+        players.add(new Player("Player 1", null));
+        players.add(new Player("Player 2", null));
+        players.add(new Player("Player 3", null));
+        players.add(new Player("Player 4", null));
+        players.add(new Player("Player 5", null));
 
         int numGamesEach = 4;
 

@@ -3,6 +3,7 @@ package utilities;
 import data_classes.Game;
 import data_classes.Player;
 import javafx.application.Platform;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.css.PseudoClass;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -214,8 +215,8 @@ public class MainControllerUtilities
 
     /**
      * This function sets the height of the schedule list view based on the content in the schedule list view
-     * @param scheduleListView
-     * @param availableHeight
+     * @param scheduleListView The schedule list view
+     * @param availableHeight The available height to expand into
      */
     public static void resizeListViewToContent(ListView<Game> scheduleListView, double availableHeight) 
     {
@@ -226,20 +227,31 @@ public class MainControllerUtilities
         scheduleListView.setPrefHeight(cappedHeight);
     } 
 
-    public static void resizePlayersTable(TableView<Player> playersTableView, VBox rightVBox, VBox rightTopVBox)
+    /**
+     * This function is a wrapper function to resize the players table when a new shedule is made or the window size is changed
+     * @param playersTableView The players table-view
+     * @param leftVBox The left vertical box
+     * @param leftTopVBox The top vertical box in the left vertical box
+     */
+    public static void resizePlayersTable(TableView<Player> playersTableView, VBox leftVBox, VBox leftTopVBox)
     {
         if (playersTableView.getItems().isEmpty())
             return;
 
         double availableHeight =
-                rightVBox.getHeight()
-                - rightTopVBox.getHeight()
-                - rightVBox.getSpacing()          
+                leftVBox.getHeight()
+                - leftTopVBox.getHeight()
+                - leftVBox.getSpacing()          
                 - 4;
 
         resizePlayersTableToContent(playersTableView, availableHeight);
     }
 
+    /**
+     * This function sets the height of the players table based on the content in the players table
+     * @param playersTableView The players table-view
+     * @param availableHeight The available height to expand into
+     */
     public static void resizePlayersTableToContent(TableView<Player> playersTableView, double availableHeight)
     {
         int itemCount = playersTableView.getItems().size();
@@ -253,6 +265,11 @@ public class MainControllerUtilities
         playersTableView.setPrefHeight(cappedHeight);
     }
 
+    /**
+     * Returns the height of the header area of the given table-view
+     * @param playersTableView The players table-view
+     * @return the height of the table's column header, or 0 if the header node cannot be found
+     */
     private static double getPlayersTableHeaderHeight(TableView<Player> playersTableView)
     {
         Node header = playersTableView.lookup(".column-header-background");
@@ -261,9 +278,19 @@ public class MainControllerUtilities
         return header.getBoundsInLocal().getHeight();
     }
 
+    /**
+     * Configures the players table
+     * Configures the dynamic colouring as well as the click-away commits feature
+     * @param playersTableView The players table-view
+     */
     public static void configurePlayersTable(TableView<Player> playersTableView)
     {
         playersTableView.setRowFactory(tv -> new TableRow<Player>() {
+            /**
+             * Updates the visual state of the table row when its item or empty state changes
+             * @param player The player associated with this row, or null if the row is empty
+             * @param empty True if this row does not represent a valid item
+             */
             @Override
             protected void updateItem(Player player, boolean empty) {
                 super.updateItem(player, empty);
@@ -309,6 +336,11 @@ public class MainControllerUtilities
         }
     }
 
+    /**
+     * Configures the name column
+     * Configures editing of a player's name
+     * @param nameColumn The name column in the players table
+     */
     public static void configureNameColumn(TableColumn<Player, String> nameColumn) 
     {
         nameColumn.setCellFactory(col ->
@@ -321,6 +353,9 @@ public class MainControllerUtilities
                             commitEdit(textField.getText());
                         }
                     };
+                /**
+                 * Initializes editing for the cell and attaches a focus listener to the underlying text field when editing begins
+                 */
                 @Override
                 public void startEdit()
                 {
@@ -333,6 +368,9 @@ public class MainControllerUtilities
                         textField.focusedProperty().addListener(focusListener);
                     }
                 }
+                /**
+                 * Cancels editing for the cell and removes the focus listener from the text field
+                 */
                 @Override
                 public void cancelEdit()
                 {
@@ -344,6 +382,25 @@ public class MainControllerUtilities
                 }
             }
         );
+    }
+
+    /**
+     * Configures all table columns
+     * Particularily the refresh feature of all the columns
+     * @param nameColumn The name column
+     * @param winsColumn The wins column
+     * @param playedColumn The played column
+     * @param ratioColumn The ratio column
+     */
+    public static void configureAllTableColumns(
+        TableColumn<Player, String> nameColumn,
+        TableColumn<Player, String> winsColumn,
+        TableColumn<Player, String> playedColumn,
+        TableColumn<Player, String> ratioColumn)
+    {
+        nameColumn.setCellValueFactory(cellData ->
+            new ReadOnlyObjectWrapper<>(cellData.getValue().getName())
+        );   
     }
 
 }

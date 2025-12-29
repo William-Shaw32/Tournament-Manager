@@ -19,7 +19,8 @@
     -fx-background-insets: 0;
 }
 
-.spinner {
+.spinner 
+{
     -fx-font-family: "Gill Sans Ultra Bold";
     -fx-font-size: 16px;
 }
@@ -153,21 +154,25 @@
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.45), 18, 0.45, 0, 4);
 }
 
-.list-view:not(:focused) .list-cell:filled:selected {
+.list-view:not(:focused) .list-cell:filled:selected 
+{
     -fx-background-color: transparent;
     -fx-background-insets: 0;
 }
 
-.list-view:not(:focused) .list-cell:filled:selected .text {
+.list-view:not(:focused) .list-cell:filled:selected .text 
+{
     -fx-fill: -fx-text-inner-color;
 }
 
-.list-cell:drop-above {
+.list-cell:drop-above 
+{
     -fx-border-color: #d4af37 transparent transparent transparent;
     -fx-border-width: 2 0 0 0;
 }
 
-.list-cell:drop-below {
+.list-cell:drop-below 
+{
     -fx-border-color: transparent transparent #d4af37 transparent;
     -fx-border-width: 0 0 2 0;
 }
@@ -177,26 +182,31 @@
 /* Dialog Pane Styling (Alerts) */
 /* ========================================= */
 
-.dialog-pane {
+.dialog-pane 
+{
     -fx-background-color: #1f2a36;
 }   
 
-.dialog-pane .header-panel {
+.dialog-pane .header-panel 
+{
     -fx-background-color: #2b3c4f;
 }
 
-.dialog-pane .header-panel .label {
+.dialog-pane .header-panel .label 
+{
     -fx-text-fill: #5fd3ff;
     -fx-font-size: 16px;
     -fx-font-weight: bold;
 }
 
-.dialog-pane .content {
+.dialog-pane .content 
+{
     -fx-text-fill: #dbe4ee;
     -fx-font-size: 14px;
 }
 
-.dialog-pane .button {
+.dialog-pane .button 
+{
     -fx-background-color: #2f4a60;
     -fx-text-fill: white;
 }
@@ -206,7 +216,8 @@
 /* Toggle Button Styling */
 /* ========================================= */
 
-.toggle-button {
+.toggle-button 
+{
     -fx-padding: 0;
     -fx-background-color: #243847;
     -fx-background-radius: 6;
@@ -216,33 +227,38 @@
     -fx-faint-focus-color: transparent;
 }
 
-/* Styling for dashes on toggle list-view visible button */
-.dash-horizontal {
+.dash-horizontal 
+{
     -fx-background-color: white;
     -fx-background-radius: 1px;
 }
 
-.dash-vertical {
+.dash-vertical 
+{
     -fx-background-color: white;
     -fx-background-radius: 1px;
 
     -fx-opacity: 0;      
 }
 
-.toggle-button:selected .dash-vertical {
+.toggle-button:selected .dash-vertical 
+{
     -fx-opacity: 1;           
 }
 
-/* Styling for edit icon on edit list-view toggle button*/
-.icon-toggle {
+
+.icon-toggle 
+{
     -fx-background-color: #243847;
 }
 
-.icon-toggle .edit-icon {
+.icon-toggle .edit-icon 
+{
     -fx-fill: white;
 }
 
-.icon-toggle:selected {
+.icon-toggle:selected 
+{
     -fx-background-color: #243847;
     -fx-border-color: rgba(255, 224, 130, 0.7);
     -fx-border-width: 1;;   
@@ -250,35 +266,31 @@
     -fx-border-radius: 6;
 }
 
+
 /* ========================================= */
 /* Table-view styling
 /* ========================================= */  
 
-/* Unselected: pure grey horizontal separators */
 .table-cell 
 {
     -fx-border-color: transparent #243847 transparent transparent;
 }
 
-/* Selected: change only the border color (optional) */
 .table-row-cell:selected .table-cell 
 {
     -fx-border-color: #e6e6e6 #e6e6e6 #e6e6e6 transparent;
 }
 
-/* Header background */
 .table-view .column-header-background 
 {
     -fx-background-color: #1e2b36;
 }
 
-/* Individual header cells */
 .table-view .column-header 
 {
     -fx-background-color: #1e2b36;
 }
 
-/* Header text */
 .table-view .column-header .label 
 {
     -fx-alignment: CENTER;
@@ -286,14 +298,12 @@
     -fx-font-size: 16px;
 }
 
-/* Filler area to the right of last column */
 .table-view .filler 
 {
     -fx-background-color: #1e2b36;
     -fx-font-family: "Gill Sans Ultra Bold";
 }
 
-/* All table rows */
 .table-row-cell 
 {
     -fx-font-family: "Gill Sans Ultra Bold";
