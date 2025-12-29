@@ -287,20 +287,16 @@
     -fx-font-family: "Gill Sans Ultra Bold";
 }
 
-.table-cell 
+.table-view .table-cell 
 {
     -fx-alignment: CENTER_LEFT;
     -fx-padding: 0 0 0 35px;
 }
 
 .table-cell .text {
-    -fx-fill: #3eb9f2;
-}
-
-.table-row-cell:selected {
-    -fx-background-color: white;
+    -fx-fill: #243847;
 }
 
 .table-view .text-field {
-    -fx-text-fill: #3eb9f2;
+    -fx-text-fill: #243847;
 }

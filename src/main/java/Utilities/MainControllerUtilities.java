@@ -1,12 +1,14 @@
-package Utilities;
+package utilities;
 
 import data_classes.Game;
 import data_classes.Player;
 import javafx.application.Platform;
 import javafx.css.PseudoClass;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.util.converter.DefaultStringConverter;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
@@ -260,36 +262,112 @@ public class MainControllerUtilities
         return header.getBoundsInLocal().getHeight();
     }
 
+    public static void configurePlayersTable(TableView<Player> playersTableView)
+    {
+        playersTableView.setRowFactory(tv -> new TableRow<Player>() {
+            @Override
+            protected void updateItem(Player player, boolean empty) {
+                super.updateItem(player, empty);
+                if (empty || player == null) {
+                    setBackground(null);
+                } else {
+                    setBackground(new Background(new BackgroundFill(
+                        player.getColour(), CornerRadii.EMPTY, Insets.EMPTY
+                    )));
+                }
+            }
+        });     
+    }
+
     public static void configureNameColumn(TableColumn<Player, String> nameColumn) 
     {
         nameColumn.setCellFactory(col ->
-            new TextFieldTableCell<Player, String>(new DefaultStringConverter()) {
-                private TextField textField;
+        new TextFieldTableCell<Player, String>(new DefaultStringConverter())
+        {
+            private TextField textField;
 
-                private final javafx.beans.value.ChangeListener<Boolean> focusListener =
-                    (obs, had, has) -> {
-                        if (!has && isEditing() && textField != null) {
-                            commitEdit(textField.getText());
-                        }
-                    };
-                @Override
-                public void startEdit() {
-                    super.startEdit();
+            private final javafx.beans.value.ChangeListener<Boolean> focusListener =
+                (obs, had, has) -> {
+                    if (!has && isEditing() && textField != null) {
+                        commitEdit(textField.getText());
+                    }
+                };
 
-                    if (getGraphic() instanceof TextField tf) {
-                        textField = tf;
-                        textField.focusedProperty().removeListener(focusListener);
-                        textField.focusedProperty().addListener(focusListener);
-                    }
+            @Override
+            public void startEdit()
+            {
+                super.startEdit();
+
+                if (getGraphic() instanceof TextField tf)
+                {
+                    textField = tf;
+                    textField.focusedProperty().removeListener(focusListener);
+                    textField.focusedProperty().addListener(focusListener);
                 }
-                @Override
-                public void cancelEdit() {
-                    super.cancelEdit();
-                    if (textField != null) {
-                        textField.focusedProperty().removeListener(focusListener);
-                    }
-                }
+
+                applyCellColor();
             }
-        );
+
+            @Override
+            public void cancelEdit()
+            {
+                super.cancelEdit();
+                if (textField != null) {
+                    textField.focusedProperty().removeListener(focusListener);
+                }
+                applyCellColor();
+            }
+
+            @Override
+            public void updateItem(String value, boolean empty)
+            {
+                super.updateItem(value, empty);
+
+                if (empty || getTableRow() == null || getTableRow().getItem() == null)
+                {
+                    setStyle("");          // important: clear reused cell styling
+                    return;
+                }
+
+                applyCellColor();
+            }
+
+            @Override
+            public void updateSelected(boolean selected)
+            {
+                super.updateSelected(selected);
+                // This is the key: deselect triggers updateSelected, not updateItem.
+                applyCellColor();
+            }
+
+            private void applyCellColor()
+            {
+                if (getTableRow() == null) {
+                    setStyle("");
+                    return;
+                }
+
+                Player p = getTableRow().getItem();
+                if (p == null) {
+                    setStyle("");
+                    return;
+                }
+
+                Color c = p.getColour();
+
+                // If you want selected rows tinted, uncomment:
+                // if (isSelected()) c = c.darker();
+
+                int r = (int) Math.round(c.getRed() * 255.0);
+                int g = (int) Math.round(c.getGreen() * 255.0);
+                int b = (int) Math.round(c.getBlue() * 255.0);
+                double a = c.getOpacity();
+
+                // Force the *cell* background. This beats the “white after deselect” issue.
+                setStyle("-fx-background-color: rgba(" + r + "," + g + "," + b + "," + a + ");");
+            }
+        }
+    );
     }
+
 }

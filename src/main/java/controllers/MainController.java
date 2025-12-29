@@ -3,11 +3,12 @@ package controllers;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
-import Utilities.*;
+
 import data_classes.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import utilities.*;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.event.ActionEvent;
 
@@ -52,6 +53,7 @@ public class MainController
     private int numGamesEach = 0;
     private int numGamesRemaining = 0;
     private int numPlayers = 0;
+    private int numColoursGenerated;
 
     /**
      * This is the initialize functiton for the main controller
@@ -84,6 +86,7 @@ public class MainController
             MainControllerUtilities.resizeSchedule(scheduleListView, rightVBox, rightTopVBox, roundsPagination, paginationVSpacer));
         // Makes the schedule list view draggable
         DragDropUtilities.configureDragDrop(scheduleListView, game -> new Label(game.toString()), this::reorderGame, dragDropEnabled);
+        MainControllerUtilities.configurePlayersTable(playersTableView);
         MainControllerUtilities.configureNameColumn(nameColumn);
         // Configures the dynamic behaviour of the players table view
         rightVBox.heightProperty().addListener((obs, o, n) ->
@@ -263,6 +266,8 @@ public class MainController
         playersTableView.setVisible(true);
         numPlayers++;
         Player newPlayer = new Player("Player " + numPlayers);
+        newPlayer.setColour(numColoursGenerated);
+        numColoursGenerated++;
         players.add(newPlayer);
         playersTableView.getItems().add(newPlayer); 
         MainControllerUtilities.resizePlayersTable(playersTableView, rightVBox, rightTopVBox); 

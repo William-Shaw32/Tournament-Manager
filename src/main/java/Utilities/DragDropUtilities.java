@@ -1,4 +1,4 @@
-package Utilities;
+package utilities;
 
 import java.util.concurrent.atomic.AtomicReference;
 import javafx.scene.SnapshotParameters;
