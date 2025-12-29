@@ -254,6 +254,18 @@
 /* Table-view styling
 /* ========================================= */  
 
+/* Unselected: pure grey horizontal separators */
+.table-cell 
+{
+    -fx-border-color: transparent #243847 transparent transparent;
+}
+
+/* Selected: change only the border color (optional) */
+.table-row-cell:selected .table-cell 
+{
+    -fx-border-color: #e6e6e6 #e6e6e6 #e6e6e6 transparent;
+}
+
 /* Header background */
 .table-view .column-header-background 
 {
@@ -269,9 +281,9 @@
 /* Header text */
 .table-view .column-header .label 
 {
-    -fx-alignment: CENTER_LEFT;
-    -fx-padding: 0 0 0 48px;
+    -fx-alignment: CENTER;
     -fx-text-fill: #3eb9f2;
+    -fx-font-size: 16px;
 }
 
 /* Filler area to the right of last column */
@@ -289,8 +301,7 @@
 
 .table-view .table-cell 
 {
-    -fx-alignment: CENTER_LEFT;
-    -fx-padding: 0 0 0 35px;
+    -fx-alignment: CENTER;
 }
 
 .table-cell .text {
@@ -299,4 +310,5 @@
 
 .table-view .text-field {
     -fx-text-fill: #243847;
+    -fx-alignment: CENTER;
 }

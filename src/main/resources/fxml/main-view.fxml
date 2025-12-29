@@ -14,6 +14,7 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.cell.TextFieldTableCell?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
@@ -23,7 +24,6 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.shape.SVGPath?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.control.cell.TextFieldTableCell?>
 
 <StackPane fx:id="root" stylesheets="@../css/main-view.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MainController">
    <children>
@@ -57,11 +57,14 @@
                               <Label text="" />
                            </placeholder>
                           <columns>
-                            <TableColumn fx:id="nameColumn" prefWidth="75.0" sortable="false" text="Name" editable="true" onEditCommit="#onNameEditCommit">
+                            <TableColumn fx:id="nameColumn" editable="true" onEditCommit="#onNameEditCommit" prefWidth="175.0" sortable="false" text="Name">
                               <cellFactory>
-                                 <TextFieldTableCell fx:factory="forTableColumn"/>
+                                 <TextFieldTableCell fx:factory="forTableColumn" />
                               </cellFactory>
                             </TableColumn>
+                              <TableColumn prefWidth="75.0" sortable="false" text="Wins" />
+                              <TableColumn prefWidth="75.0" sortable="false" text="Played" />
+                              <TableColumn prefWidth="75.0" sortable="false" text="Ratio" />
                           </columns>
                            <columnResizePolicy>
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
