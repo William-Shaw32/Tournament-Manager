@@ -133,11 +133,15 @@
 #scheduleListView .list-cell 
 {
     -fx-background-color: #243847;
-    -fx-text-fill: #3eb9f2;
     -fx-alignment: center;
-    -fx-font-family: "Gill Sans Ultra Bold";
-    -fx-font-size: 16px;
 }
+
+.list-cell .text {
+    -fx-font-family: "Segoe UI Black";
+    -fx-fill: white;
+    -fx-font-size: 16px;   
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 4, 0.3, 2, 2);
+}   
 
 #scheduleListView .list-cell:filled:selected 
 {
@@ -273,12 +277,12 @@
 
 .table-cell 
 {
-    -fx-border-color: transparent #243847 transparent transparent;
+    -fx-border-color: #243847 #243847 #243847 #243847;
 }
 
 .table-row-cell:selected .table-cell 
 {
-    -fx-border-color: #e6e6e6 #e6e6e6 #e6e6e6 transparent;
+    -fx-border-color: #e6e6e6 #e6e6e6 #e6e6e6 #e6e6e6;
 }
 
 .table-view .column-header-background 
@@ -296,6 +300,7 @@
     -fx-alignment: CENTER;
     -fx-text-fill: #3eb9f2;
     -fx-font-size: 16px;
+    -fx-font-family: "Segoe UI"
 }
 
 .table-view .filler 
@@ -306,7 +311,7 @@
 
 .table-row-cell 
 {
-    -fx-font-family: "Gill Sans Ultra Bold";
+    -fx-font-family: "Segoe UI Black";
 }
 
 .table-view .table-cell 
@@ -315,7 +320,10 @@
 }
 
 .table-cell .text {
-    -fx-fill: #243847;
+    -fx-fill: white;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 4, 0.3, 2, 2);
+    -fx-font-size: 16px;
+    /* -fx-effect: dropshadow(gaussian, black, 3, 1.0, 0, 0); */
 }
 
 .table-view .text-field {

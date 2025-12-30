@@ -1,14 +1,18 @@
 package controllers;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.Queue;
 
 import data_classes.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import utilities.*;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.scene.paint.Color;
 
@@ -45,17 +49,19 @@ public class MainController
     @FXML private TableColumn<Player, String> ratioColumn;
     @FXML private VBox leftVBox;
     @FXML private VBox leftTopVBox;
+    @FXML private Button removePlayerButton;
+    @FXML private Label statsLabel;
 
     // Data objects
     private ArrayList<Player> players = new ArrayList<>();
-    private Schedule schedule;  
+    private Schedule schedule; 
+    private Player selectedPlayer; 
+    private Queue<Color> cachedColours = new ArrayDeque<>();
 
     // Primatives
     private AtomicBoolean dragDropEnabled = new AtomicBoolean(false);
-    private boolean tournamentIsActive = false;
-    private int numGamesEach = 0;
+    private BooleanProperty tournamentIsActive = new SimpleBooleanProperty(false);
     private int numGamesRemaining = 0;
-    private int numPlayers = 0;
     private int numColoursGenerated;
 
     /**
@@ -66,6 +72,7 @@ public class MainController
     private void initialize()
     {
         playersTableView.setVisible(false);
+        statsLabel.setVisible(false);
         startEndTournamentButton.setDisable(true);
         root.setFocusTraversable(true);
         // Configures the behaviour of the ganes each spinner
@@ -89,7 +96,7 @@ public class MainController
             MainControllerUtilities.resizeSchedule(scheduleListView, rightVBox, rightTopVBox, roundsPagination, paginationVSpacer));
         // Makes the schedule list view draggable
         DragDropUtilities.configureDragDrop(scheduleListView, game -> new Label(game.toString()), this::reorderGame, dragDropEnabled);
-        MainControllerUtilities.configurePlayersTable(playersTableView);
+        MainControllerUtilities.configurePlayersTable(playersTableView, removePlayerButton);
         MainControllerUtilities.configureNameColumn(nameColumn);
         // Configures the dynamic behaviour of the players table view
         rightVBox.heightProperty().addListener((obs, o, n) ->
@@ -98,6 +105,16 @@ public class MainController
             MainControllerUtilities.resizePlayersTable(playersTableView, rightVBox, rightTopVBox));
         // Configures the players table columns (Particularily the refresh maping)
         MainControllerUtilities.configureAllTableColumns(nameColumn, winsColumn, playedColumn, ratioColumn);
+        // Lister to cache the selected player whenever a row of the table view is selected
+        playersTableView.getSelectionModel().selectedItemProperty().addListener(
+        (obs, oldP, newP) -> {
+            if (newP != null) selectedPlayer = newP;
+        }
+        );
+        // Binds remove player button disable to whether a player is selected or not
+        removePlayerButton.disableProperty().bind(
+            playersTableView.getSelectionModel().selectedItemProperty().isNull().or(tournamentIsActive)
+        );
     }
 
 
@@ -113,7 +130,7 @@ public class MainController
     @FXML
     private void generateSchedule(ActionEvent e)
     {
-        numGamesEach = gamesEachSpinner.getValue();
+        int numGamesEach = gamesEachSpinner.getValue();
         if(numGamesEach % 2 == 1 && players.size() % 2 == 1)
         {
             if (schedule != null) schedule.clear();
@@ -210,9 +227,9 @@ public class MainController
     @FXML
     private void startEndTournament(ActionEvent e)
     {
-        if(tournamentIsActive == false)
+        if(tournamentIsActive.get() == false)
             startTournament();
-        else if(tournamentIsActive == true)
+        else if(tournamentIsActive.get() == true)
             endTournament();
     }
     
@@ -229,10 +246,11 @@ public class MainController
                 "Schedule is empty").showAndWait();
             return;
         }
-        tournamentIsActive = true;
+        tournamentIsActive.set(true);
         startEndTournamentButton.setText("End Tournament");
         scheduleConfigHBox.setDisable(true);
         addPlayerButton.setDisable(true);
+        removePlayerButton.setDisable(true);
     }
 
     /**
@@ -249,7 +267,7 @@ public class MainController
             if (!result.isPresent() || result.get().getButtonData() == ButtonBar.ButtonData.CANCEL_CLOSE)
                 return;
         }
-        tournamentIsActive = false;
+        tournamentIsActive.set(false);
         startEndTournamentButton.setText("Start Tournament");
         schedule.clear();
         scheduleListView.getItems().clear();
@@ -270,20 +288,54 @@ public class MainController
     private void addPlayer()
     {
         playersTableView.setVisible(true);
-        numPlayers++;
-        String name = "Player " + numPlayers;
-        Color colour = DynamicColouringUtilities.generateNextColour(numColoursGenerated);
+        statsLabel.setVisible(true);
+        String name = "Player " + (players.size()+1);
+        Color colour = null;
+        if(!cachedColours.isEmpty())
+            colour = cachedColours.poll();
+        else
+        {
+            colour = DynamicColouringUtilities.generateNextColour(numColoursGenerated);
+            numColoursGenerated++;
+        }
         numColoursGenerated++;
         Player newPlayer = new Player(name, colour);
         players.add(newPlayer);
         playersTableView.getItems().add(newPlayer); 
         MainControllerUtilities.resizePlayersTable(playersTableView, rightVBox, rightTopVBox); 
-        if(numPlayers >= 2)
+        if(players.size() >= 2)
         {
             gamesEachSpinner.getValueFactory().setValue(players.size()-1);
             gamesEachSpinner.getEditor().setText(String.valueOf(players.size()-1));
             gamesEachSpinner.setDisable(false);
             generateScheduleButton.setDisable(false);
+        }
+    }
+
+    @FXML
+    private void removePlayer()
+    {
+        players.remove(selectedPlayer);
+        cachedColours.offer(selectedPlayer.getColour());
+        playersTableView.getItems().setAll(players);
+        MainControllerUtilities.resizePlayersTable(playersTableView, rightVBox, rightTopVBox);
+        gamesEachSpinner.getValueFactory().setValue(players.size()-1);
+        gamesEachSpinner.getEditor().setText(String.valueOf(players.size()-1));
+        if(schedule != null && !schedule.isEmpty())
+        {
+            schedule.clear();
+            scheduleListView.getItems().clear();
+            generateScheduleButton.setText("Generate");
+            numGamesRemaining = 0;
+            numGamesRemainingLabel.setText(Integer.toString(numGamesRemaining));
+            roundsPagination.setPageCount(Pagination.INDETERMINATE);
+            startEndTournamentButton.setDisable(true);
+        } 
+        if(players.size() < 2)
+        {
+            gamesEachSpinner.setDisable(true);
+            generateScheduleButton.setDisable(true);
+            gamesEachSpinner.getEditor().clear();
         }
     }
 

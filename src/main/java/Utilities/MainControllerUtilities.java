@@ -12,6 +12,7 @@ import javafx.scene.layout.*;
 import javafx.util.converter.DefaultStringConverter;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.event.EventHandler;
 
 /**
  * This class contains static utility functions to support the Main Controller class
@@ -283,56 +284,63 @@ public class MainControllerUtilities
      * Configures the dynamic colouring as well as the click-away commits feature
      * @param playersTableView The players table-view
      */
-    public static void configurePlayersTable(TableView<Player> playersTableView)
+    public static void configurePlayersTable(TableView<Player> playersTableView, Button removePlayerButton)
     {
         playersTableView.setRowFactory(tv -> new TableRow<Player>() {
-            /**
-             * Updates the visual state of the table row when its item or empty state changes
-             * @param player The player associated with this row, or null if the row is empty
-             * @param empty True if this row does not represent a valid item
-             */
             @Override
-            protected void updateItem(Player player, boolean empty) {
+            protected void updateItem(Player player, boolean empty)
+            {
                 super.updateItem(player, empty);
-                if (empty || player == null) {
+                if (empty || player == null)
+                {
                     setBackground(null);
-                } else {
+                }
+                else
+                {
                     setBackground(new Background(new BackgroundFill(
                         player.getColour(), CornerRadii.EMPTY, Insets.EMPTY
                     )));
                 }
             }
-        });  
-       
-        final javafx.event.EventHandler<javafx.scene.input.MouseEvent> clearOnOutsideClick = e -> {
-            Object t = e.getTarget();
-            if (!(t instanceof javafx.scene.Node n)) 
+        });
+        final EventHandler<MouseEvent> clearOnOutsideClick = e -> {
+            Object target = e.getTarget();
+            if (!(target instanceof Node node))
             {
                 playersTableView.getSelectionModel().clearSelection();
                 return;
             }
-            while (n != null) 
+
+            // Skip deselect if clicking the Remove button
+            if (removePlayerButton != null && isInNode(node, removePlayerButton))
             {
-                if (n == playersTableView) {
-                    return;
-                }
-                n = n.getParent();
+                return;
             }
+
+            // Skip deselect if clicking inside the table
+            if (isInNode(node, playersTableView))
+            {
+                return;
+            }
+
+            // Otherwise: clicked outside
             playersTableView.getSelectionModel().clearSelection();
         };
+
         playersTableView.sceneProperty().addListener((obs, oldScene, newScene) -> {
-            if (oldScene != null) 
+            if (oldScene != null)
             {
-                oldScene.removeEventFilter(javafx.scene.input.MouseEvent.MOUSE_PRESSED, clearOnOutsideClick);
+                oldScene.removeEventFilter(MouseEvent.MOUSE_PRESSED, clearOnOutsideClick);
             }
-            if (newScene != null) 
+            if (newScene != null)
             {
-                newScene.addEventFilter(javafx.scene.input.MouseEvent.MOUSE_PRESSED, clearOnOutsideClick);
+                newScene.addEventFilter(MouseEvent.MOUSE_PRESSED, clearOnOutsideClick);
             }
         });
-        if (playersTableView.getScene() != null) 
+
+        if (playersTableView.getScene() != null)
         {
-            playersTableView.getScene().addEventFilter(javafx.scene.input.MouseEvent.MOUSE_PRESSED, clearOnOutsideClick);
+            playersTableView.getScene().addEventFilter(MouseEvent.MOUSE_PRESSED, clearOnOutsideClick);
         }
     }
 
@@ -382,6 +390,15 @@ public class MainControllerUtilities
                 }
             }
         );
+    }
+
+    private static boolean isInNode(Node target, Node container)
+    {
+        for (Node n = target; n != null; n = n.getParent())
+        {
+            if (n == container) return true;
+        }
+        return false;
     }
 
     /**
