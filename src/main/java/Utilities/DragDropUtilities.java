@@ -122,6 +122,12 @@ public class DragDropUtilities
                 if (cell.isEmpty()) return;
                 if (e.getButton() != MouseButton.PRIMARY) return;
                 Dragboard db = cell.startDragAndDrop(TransferMode.MOVE);
+
+                 // Blocks dragging for played games
+                T item = cell.getItem();
+                if (item instanceof Game g && g.getPlayed())
+                    return;
+
                 ClipboardContent content = new ClipboardContent();
                 content.put(DRAG_INDEX, cell.getIndex());
                 db.setContent(content);
@@ -137,6 +143,11 @@ public class DragDropUtilities
                 Dragboard db = e.getDragboard();
                 if (!db.hasContent(DRAG_INDEX)) return;
                 if (cell.isEmpty()) return;
+
+                // Blocks using played games as drop targets
+                T target = cell.getItem();
+                if (target instanceof Game g && g.getPlayed())
+                    return;
 
                 e.acceptTransferModes(TransferMode.MOVE);
 
