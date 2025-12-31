@@ -4,6 +4,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.Queue;
 
 import data_classes.*;
@@ -64,12 +65,14 @@ public class MainController
     private Schedule schedule; 
     private Player selectedPlayer; 
     private Queue<Color> cachedColours = new ArrayDeque<>();
-    private Game nextGame;
+    private Game currentGame;
     private Player playerA;
     private Player playerB;
 
     // Primatives
     private AtomicBoolean dragDropEnabled = new AtomicBoolean(false);
+    private AtomicInteger currentGameIndex = new AtomicInteger(0);
+    private AtomicInteger numGamesInFullRound = new AtomicInteger(0);
     private BooleanProperty tournamentIsActive = new SimpleBooleanProperty(false);
     private int numGamesRemaining = 0;
     private int numColoursGenerated;
@@ -110,7 +113,8 @@ public class MainController
         rightTopVBox.heightProperty().addListener((obs, o, n) -> 
             MainControllerUtilities.resizeSchedule(scheduleListView, rightVBox, rightTopVBox, roundsPagination, paginationVSpacer));
         // Makes the schedule list view draggable
-        DragDropUtilities.configureDragDrop(scheduleListView, game -> new Label(game.toString()), this::reorderGame, dragDropEnabled);
+        DragDropUtilities.configureDragDrop(scheduleListView, game -> new Label(game.toString()), this::reorderGame, dragDropEnabled, 
+        player1Spinner, player2Spinner, roundsPagination, currentGameIndex, numGamesInFullRound);
         MainControllerUtilities.configurePlayersTable(playersTableView, removePlayerButton);
         MainControllerUtilities.configureNameColumn(nameColumn);
         // Configures the dynamic behaviour of the players table view
@@ -175,6 +179,7 @@ public class MainController
         roundsPagination.setCurrentPageIndex(0);
         ScheduleBuilder sb = new ScheduleBuilder(players, numGamesEach);
         schedule = sb.build(); 
+        numGamesInFullRound.set(schedule.getNumGamesInFullRound());
         displayRound();  
         MainControllerUtilities.resizeSchedule(scheduleListView, rightVBox, rightTopVBox, roundsPagination, paginationVSpacer);
         numGamesRemaining = (players.size() * numGamesEach) / 2;
@@ -200,13 +205,15 @@ public class MainController
      * @param dragIndex The list-view index of the cell that was dragged
      * @param dropIndex The list-view index of where the cell was dropped
      */
-    private void reorderGame(int dragIndex, int dropIndex)
+    private void reorderGame(int oldIndex, int newIndex)
     {
-        int baseIndex = roundsPagination.getCurrentPageIndex() * schedule.getNumGamesInFullRound();
-        int oldIndex = baseIndex + dragIndex;
-        int newIndex = baseIndex + dropIndex;
         schedule.changeGameIndex(oldIndex, newIndex);
         displayRound();
+        if(oldIndex == currentGameIndex.get() || newIndex == currentGameIndex.get())
+        {
+            currentGame = schedule.getGame(currentGameIndex.get());  
+            loadCurrentGame();  
+        }
     }
 
     /**
@@ -272,8 +279,8 @@ public class MainController
         player2Spinner.setDisable(false);
 
         // Pulls first game
-        nextGame = schedule.getNextGame();
-        loadNextGame();
+        currentGame = schedule.getGame(0);
+        loadCurrentGame();
     }
 
     /**
@@ -405,23 +412,24 @@ public class MainController
         playersTableView.getItems().setAll(players);
         playersTableView.refresh();
 
-        schedule.markGamePlayed();
+        schedule.markGamePlayed(currentGameIndex.get());
         scheduleListView.refresh();
 
         // Pulls next game
-        nextGame = schedule.getNextGame();
-        if(nextGame == null)
+        currentGameIndex.set(currentGameIndex.get() + 1);
+        currentGame = schedule.getGame(currentGameIndex.get());
+        if(currentGame == null)
         {
             clearScoreboard();
             return;
         }
-        loadNextGame();
+        loadCurrentGame();
     }
 
-    private void loadNextGame()
+    private void loadCurrentGame()
     {
-        playerA = nextGame.getPlayerA();
-        playerB = nextGame.getPlayerB();
+        playerA = currentGame.getPlayerA();
+        playerB = currentGame.getPlayerB();
         player1ScoreLabel.setText(playerA.getName());
         player2ScoreLabel.setText(playerB.getName());
         Background b1 = new Background(new BackgroundFill(playerA.getColour(), CornerRadii.EMPTY, Insets.EMPTY));

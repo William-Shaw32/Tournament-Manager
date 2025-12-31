@@ -14,7 +14,15 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.control.ListView;
 import javafx.css.PseudoClass;
 import javafx.scene.Node;
+
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.Pagination;
 
 /**
  * This class handles the drag and drop functionality for the edit schedule list-view feature
@@ -66,7 +74,12 @@ public class DragDropUtilities
         ListView<T> listView,
         CellRenderer<T> renderer,
         ReorderGameHandler reorderGameHandler,
-        AtomicBoolean dragDropEnabled
+        AtomicBoolean dragDropEnabled,
+        Spinner<Integer> player1Spinner,
+        Spinner<Integer> player2Spinner, 
+        Pagination roundsPagination,
+        AtomicInteger currentGameIndex,
+        AtomicInteger numGamesInFullRound
     )
     {
         // Sets the cell factory on the list view
@@ -179,6 +192,7 @@ public class DragDropUtilities
             {
                 if (!dragDropEnabled.get()) return;
                 Dragboard db = e.getDragboard();
+                if (!db.hasContent(DRAG_INDEX)) return;
                 int dragIndex = (Integer) db.getContent(DRAG_INDEX);
                 int targetIndex = cell.getIndex();
                 boolean insertAbove = e.getY() < (cell.getHeight() / 2.0);
@@ -187,8 +201,36 @@ public class DragDropUtilities
                     dropIndex = targetIndex;
                 else
                     dropIndex = targetIndex + 1;
-                reorderGameHandler.reorderGame(dragIndex, dropIndex);
+
+                // Checks if the current game is being reordered
+                int currentIndex = currentGameIndex.get();
+                int baseIndex = roundsPagination.getCurrentPageIndex() * numGamesInFullRound.get();
+                int oldIndex = baseIndex + dragIndex;
+                int newIndex = baseIndex + dropIndex;
+                if (oldIndex == currentIndex || newIndex == currentIndex)
+                {
+                    int score1 = (player1Spinner == null || player1Spinner.getValue() == null) ? 0 : player1Spinner.getValue();
+                    int score2 = (player2Spinner == null || player2Spinner.getValue() == null) ? 0 : player2Spinner.getValue();
+
+                    if (score1 > 0 || score2 > 0)
+                    {
+                        Optional<ButtonType> result = MainControllerUtilities.createDecisionAlert(
+                            Alert.AlertType.WARNING, "Warning", 
+                            "Reorder current game", 
+                            "This action will discard the score of the current game").showAndWait();
+                        if (!result.isPresent() || result.get().getButtonData() == ButtonBar.ButtonData.CANCEL_CLOSE)
+                        {
+                            clearIndicator.run();
+                            e.setDropCompleted(false);
+                            e.consume();
+                            return;    
+                        }
+                    }
+                }
+    
+                reorderGameHandler.reorderGame(oldIndex, newIndex);
                 clearIndicator.run();
+                e.setDropCompleted(true);
                 e.consume();
             });
             
@@ -202,6 +244,5 @@ public class DragDropUtilities
             
             return cell;
         });
-    }
-    
+    }  
 }
