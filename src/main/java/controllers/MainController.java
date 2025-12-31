@@ -401,6 +401,8 @@ public class MainController
         // Updates the player stats
         playerA.updateStats(player1Score, player2Score);
         playerB.updateStats(player2Score, player1Score);
+        players.sort(null);
+        playersTableView.getItems().setAll(players);
         playersTableView.refresh();
 
         schedule.markGamePlayed();
@@ -414,7 +416,6 @@ public class MainController
             return;
         }
         loadNextGame();
-
     }
 
     private void loadNextGame()

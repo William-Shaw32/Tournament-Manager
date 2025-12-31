@@ -5,7 +5,7 @@ import java.math.RoundingMode;
 
 import javafx.scene.paint.Color;
 
-public class Player 
+public class Player implements Comparable<Player>
 {
 	private String name;
 	private Color colour;
@@ -22,7 +22,7 @@ public class Player
 		this.colour = colour;
 		wins = 0;
 		gamesPlayed = 0;
-		ratio = 0.0;
+		ratio = 1.0;
 		ralliesWon = 0;
 		ralliesLost = 0;
 	}
@@ -72,5 +72,21 @@ public class Player
 		else
 			ratio = (double)ralliesWon / (double)ralliesLost;
 		if(gameRalliesWon > gameRalliesLost) wins++;
+	}
+
+	public int compareTo(Player otherPlayer)
+	{
+		if(this.getWins() > otherPlayer.getWins())
+			return -1;
+		else if(this.getWins() < otherPlayer.getWins())
+			return 1;
+		else if(this.getWins() == otherPlayer.getWins())
+		{
+			if(this.getRatio() > otherPlayer.getRatio())
+				return -1;
+			else if(this.getRatio() < otherPlayer.getRatio())
+				return 1;
+		}
+		return 0;
 	}
 }
