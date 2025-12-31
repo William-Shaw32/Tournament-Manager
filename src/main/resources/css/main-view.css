@@ -10,7 +10,15 @@
 {
     -fx-background-color:  #243847;
     -fx-text-fill: #e6edf3;
+    -fx-alignment: center;
 } 
+
+.score-spinner .text-field
+{
+    -fx-font-size: 24px;
+    -fx-font-family: "Segoe UI Black";
+
+}
 
 .spinner .increment-arrow-button,
 .spinner .decrement-arrow-button 
@@ -329,4 +337,12 @@
 .table-view .text-field {
     -fx-text-fill: #243847;
     -fx-alignment: CENTER;
+}
+
+/* ========================================= */
+/* Text-Field styling
+/* ========================================= */  
+
+.text-field {
+    -fx-text-fill: #ffffff;
 }

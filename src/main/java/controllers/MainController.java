@@ -8,6 +8,7 @@ import java.util.Queue;
 
 import data_classes.*;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import utilities.*;
@@ -44,19 +45,27 @@ public class MainController
     @FXML private Button addPlayerButton;
     @FXML private TableView<Player> playersTableView;
     @FXML private TableColumn<Player, String> nameColumn;
-    @FXML private TableColumn<Player, String> winsColumn;
-    @FXML private TableColumn<Player, String> playedColumn;
-    @FXML private TableColumn<Player, String> ratioColumn;
+    @FXML private TableColumn<Player, Integer> winsColumn;
+    @FXML private TableColumn<Player, Integer> playedColumn;
+    @FXML private TableColumn<Player, Double> ratioColumn;
     @FXML private VBox leftVBox;
     @FXML private VBox leftTopVBox;
     @FXML private Button removePlayerButton;
     @FXML private Label statsLabel;
+    @FXML private Label player1ScoreLabel;
+    @FXML private Label player2ScoreLabel;
+    @FXML private Spinner<Integer> player1Spinner;
+    @FXML private Spinner<Integer> player2Spinner;
+    @FXML private Button endGameButton;
+    @FXML private TextField scoreToWinTextField;
 
     // Data objects
     private ArrayList<Player> players = new ArrayList<>();
     private Schedule schedule; 
     private Player selectedPlayer; 
     private Queue<Color> cachedColours = new ArrayDeque<>();
+    private Player playerA;
+    private Player playerB;
 
     // Primatives
     private AtomicBoolean dragDropEnabled = new AtomicBoolean(false);
@@ -74,7 +83,10 @@ public class MainController
         playersTableView.setVisible(false);
         statsLabel.setVisible(false);
         startEndTournamentButton.setDisable(true);
+        endGameButton.setDisable(true);
+        scoreToWinTextField.setDisable(true);
         root.setFocusTraversable(true);
+        MainControllerUtilities.configurePlayerSpinners(player1Spinner, player2Spinner);
         // Configures the behaviour of the ganes each spinner
         MainControllerUtilities.configureGamesEachSpinner( 
             gamesEachSpinner, 
@@ -238,19 +250,23 @@ public class MainController
      */
     private void startTournament()
     {
-        if(schedule == null || schedule.isEmpty() == true)
-        {
-            MainControllerUtilities.createBasicAlert(
-                Alert.AlertType.ERROR, "Error", 
-                "Cannot start tournament", 
-                "Schedule is empty").showAndWait();
-            return;
-        }
         tournamentIsActive.set(true);
         startEndTournamentButton.setText("End Tournament");
         scheduleConfigHBox.setDisable(true);
         addPlayerButton.setDisable(true);
-        removePlayerButton.setDisable(true);
+        endGameButton.setDisable(false);
+        scoreToWinTextField.setDisable(false);
+
+        // Pull first game
+        Game nextGame = schedule.getNextGame();
+        playerA = nextGame.getPlayerA();
+        playerB = nextGame.getPlayerB();
+        player1ScoreLabel.setText(playerA.getName());
+        player2ScoreLabel.setText(playerB.getName());
+        Background b1 = new Background(new BackgroundFill(playerA.getColour(), CornerRadii.EMPTY, Insets.EMPTY));
+        Background b2 = new Background(new BackgroundFill(playerB.getColour(), CornerRadii.EMPTY, Insets.EMPTY));
+        player1ScoreLabel.setBackground(b1);
+        player2ScoreLabel.setBackground(b2);
     }
 
     /**
@@ -278,6 +294,8 @@ public class MainController
         addPlayerButton.setDisable(false);
         startEndTournamentButton.setDisable(true);
         roundsPagination.setPageCount(Pagination.INDETERMINATE);
+        endGameButton.setDisable(true);
+        scoreToWinTextField.setDisable(true);
     }
 
     /**
@@ -354,6 +372,53 @@ public class MainController
             return;
         schedule.updatePlayerName(player);
         displayRound();
+    }
+
+    @FXML
+    private void endGame()
+    {
+        // Updating Stats
+        int player1Score = player1Spinner.getValue();
+        int player2Score = player2Spinner.getValue();
+
+        if(player1Score == player2Score)
+            return;
+        
+        if(player1Score > player2Score)
+        {
+            playerA.updateStats(player1Score, player2Score, true);
+            playerB.updateStats(player2Score, player1Score, false);
+        }
+        else
+        {
+           playerA.updateStats(player1Score, player2Score, false);
+           playerB.updateStats(player2Score, player1Score, true);
+        }
+        playersTableView.refresh();
+
+        // Pull next game
+        Game nextGame = schedule.getNextGame();
+        if(nextGame == null)
+        {
+            player1ScoreLabel.setText("");
+            player2ScoreLabel.setText("");
+            Background b = new Background(new BackgroundFill(Color.web("#243847"), CornerRadii.EMPTY, Insets.EMPTY));
+            player1ScoreLabel.setBackground(b);
+            player2ScoreLabel.setBackground(b);
+            player1Spinner.getValueFactory().setValue(0);
+            player2Spinner.getValueFactory().setValue(0);
+            return;
+        }
+        playerA = nextGame.getPlayerA();
+        playerB = nextGame.getPlayerB();
+        player1ScoreLabel.setText(playerA.getName());
+        player2ScoreLabel.setText(playerB.getName());
+        Background b1 = new Background(new BackgroundFill(playerA.getColour(), CornerRadii.EMPTY, Insets.EMPTY));
+        Background b2 = new Background(new BackgroundFill(playerB.getColour(), CornerRadii.EMPTY, Insets.EMPTY));
+        player1ScoreLabel.setBackground(b1);
+        player2ScoreLabel.setBackground(b2);
+        player1Spinner.getValueFactory().setValue(0);
+        player2Spinner.getValueFactory().setValue(0);
     }
 
 

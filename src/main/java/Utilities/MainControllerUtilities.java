@@ -23,6 +23,24 @@ public class MainControllerUtilities
     // Pseudo css class for when the schedule list-view is put into edit mode
     private static final PseudoClass EDIT_MODE = PseudoClass.getPseudoClass("edit-mode");
 
+
+
+
+
+    public static void configurePlayerSpinners(Spinner<Integer> spinner1, Spinner<Integer> spinner2)
+    {
+        SpinnerValueFactory.IntegerSpinnerValueFactory vf1 =
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(
+                        0, Integer.MAX_VALUE, 0
+                );
+        SpinnerValueFactory.IntegerSpinnerValueFactory vf2 =
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(
+                        0, Integer.MAX_VALUE, 0
+                );       
+        spinner1.setValueFactory(vf1);
+        spinner2.setValueFactory(vf2);
+    }
+
     /**
      * This function configures the behaviour of the games each spinner
      * @param numPlayers       The number of players in the tournament
@@ -411,13 +429,21 @@ public class MainControllerUtilities
      */
     public static void configureAllTableColumns(
         TableColumn<Player, String> nameColumn,
-        TableColumn<Player, String> winsColumn,
-        TableColumn<Player, String> playedColumn,
-        TableColumn<Player, String> ratioColumn)
+        TableColumn<Player, Integer> winsColumn,
+        TableColumn<Player, Integer> playedColumn,
+        TableColumn<Player, Double> ratioColumn)
     {
         nameColumn.setCellValueFactory(cellData ->
             new ReadOnlyObjectWrapper<>(cellData.getValue().getName())
         );   
+        winsColumn.setCellValueFactory(cellData ->
+            new ReadOnlyObjectWrapper<>(cellData.getValue().getWins())
+        ); 
+        playedColumn.setCellValueFactory(cellData ->
+            new ReadOnlyObjectWrapper<>(cellData.getValue().getGamesPlayed())
+        ); 
+        ratioColumn.setCellValueFactory(cellData ->
+            new ReadOnlyObjectWrapper<>(cellData.getValue().getRatio())
+        ); 
     }
-
 }

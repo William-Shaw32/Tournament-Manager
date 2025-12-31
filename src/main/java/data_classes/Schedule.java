@@ -11,7 +11,8 @@ import java.util.ArrayList;
 public class Schedule 
 {
     private ArrayList<Game> games; // List of games
-	int numGamesInFullRound;       // The number of games in a full round
+	private int numGamesInFullRound;       // The number of games in a full round
+	private int index = 0; // The index of the current game
 	
 	/**
 	 * Constructor
@@ -23,6 +24,13 @@ public class Schedule
 	{
 		this.games = games;
 		this.numGamesInFullRound = numGamesInFullRound;
+	}
+
+	public Game getNextGame()
+	{
+		if(index >= games.size())
+			return null;
+		return games.get(index++);
 	}
 
 	/**

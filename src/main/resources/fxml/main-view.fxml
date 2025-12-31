@@ -13,6 +13,7 @@
 <?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.control.cell.TextFieldTableCell?>
 <?import javafx.scene.image.Image?>
@@ -105,21 +106,69 @@
                           <Rectangle arcHeight="30.0" arcWidth="30.0" height="91.0" width="200.0" />
                      </clip>
                   </ImageView>
-                  <Region prefHeight="711.0" prefWidth="708.0" />
+                  <Region prefHeight="144.0" prefWidth="908.0" />
+                  <HBox alignment="CENTER" prefHeight="122.0" prefWidth="908.0">
+                     <children>
+                        <Region prefHeight="123.0" prefWidth="24.0" />
+                        <Label fx:id="player1ScoreLabel" alignment="CENTER" prefHeight="123.0" prefWidth="550.0" style="-fx-background-color: #243847;" textFill="WHITE">
+                           <font>
+                              <Font name="Segoe UI Black Italic" size="36.0" />
+                           </font>
+                        </Label>
+                        <Region prefHeight="123.0" prefWidth="11.0" />
+                        <Spinner fx:id="player1Spinner" prefHeight="123.0" prefWidth="158.0" styleClass="score-spinner" />
+                     </children>
+                  </HBox>
+                  <Region prefHeight="46.0" prefWidth="908.0" />
+                  <HBox alignment="CENTER" prefHeight="122.0" prefWidth="721.0">
+                     <children>
+                        <Region prefHeight="123.0" prefWidth="24.0" />
+                        <Label fx:id="player2ScoreLabel" alignment="CENTER" prefHeight="123.0" prefWidth="550.0" style="-fx-background-color: #243847;" textFill="WHITE">
+                           <font>
+                              <Font name="Segoe UI Black Italic" size="36.0" />
+                           </font>
+                        </Label>
+                        <Region prefHeight="123.0" prefWidth="11.0" />
+                        <Spinner fx:id="player2Spinner" prefHeight="123.0" prefWidth="158.0" styleClass="score-spinner" />
+                     </children>
+                  </HBox>
+                  <Region prefHeight="73.0" prefWidth="908.0" />
+                  <HBox alignment="CENTER" prefHeight="133.0" prefWidth="908.0">
+                     <children>
+                        <Button fx:id="endGameButton" mnemonicParsing="false" onAction="#endGame" prefHeight="75.0" prefWidth="225.0" style="-fx-background-color: #243847;" text="END GAME" textFill="#3eb9f2">
+                           <font>
+                              <Font name="Segoe UI Black Italic" size="28.0" />
+                           </font>
+                        </Button>
+                        <Region prefHeight="104.0" prefWidth="37.0" />
+                        <Label fx:id="statsLabel1" alignment="CENTER" prefHeight="75.0" prefWidth="225.0" text="SCORE TO WIN" textFill="#3eb9f2">
+                           <font>
+                              <Font name="Segoe UI Black Italic" size="28.0" />
+                           </font>
+                        </Label>
+                        <Region prefHeight="110.0" prefWidth="11.0" />
+                        <TextField fx:id="scoreToWinTextField" alignment="CENTER" prefHeight="67.0" prefWidth="102.0" style="-fx-background-color: #243847;">
+                           <font>
+                              <Font name="Segoe UI Black" size="24.0" />
+                           </font>
+                        </TextField>
+                     </children>
+                  </HBox>
+                  <Region prefHeight="267.0" prefWidth="908.0" />
                   <HBox fx:id="bottomHBox" alignment="CENTER" prefHeight="165.0" prefWidth="708.0">
                      <children>
-                        <Button fx:id="startEndTournamentButton" mnemonicParsing="false" onAction="#startEndTournament" prefHeight="50.0" prefWidth="203.0" style="-fx-background-color: #243847;" text="Start Tournament" textFill="#3eb9f2" wrapText="true">
+                        <Button fx:id="startEndTournamentButton" mnemonicParsing="false" onAction="#startEndTournament" prefHeight="75.0" prefWidth="225.0" style="-fx-background-color: #243847;" text="Start Tournament" textFill="#3eb9f2" wrapText="true">
                            <font>
                               <Font name="Segoe UI Black" size="20.0" />
                            </font>
                         </Button>
                         <Region prefHeight="100.0" prefWidth="57.0" />
-                        <Label fx:id="gamesRemainingLabel" prefHeight="67.0" prefWidth="120.0" text="Games Remaining" textFill="#3eb9f2" wrapText="true">
+                        <Label fx:id="gamesRemainingLabel" alignment="CENTER" prefHeight="75.0" prefWidth="225.0" text="Games Remaining" textFill="#3eb9f2" wrapText="true">
                            <font>
                               <Font name="Segoe UI Black" size="20.0" />
                            </font>
                         </Label>
-                        <Label fx:id="numGamesRemainingLabel" prefHeight="50.0" prefWidth="50.0" text="0" textFill="#3eb9f2">
+                        <Label fx:id="numGamesRemainingLabel" alignment="CENTER" prefHeight="50.0" prefWidth="50.0" text="0" textFill="#3eb9f2">
                            <font>
                               <Font name="Segoe UI Black" size="28.0" />
                            </font>
