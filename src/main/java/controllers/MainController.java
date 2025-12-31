@@ -403,6 +403,9 @@ public class MainController
         playerB.updateStats(player2Score, player1Score);
         playersTableView.refresh();
 
+        schedule.markGamePlayed();
+        scheduleListView.refresh();
+
         // Pulls next game
         nextGame = schedule.getNextGame();
         if(nextGame == null)

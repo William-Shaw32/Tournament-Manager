@@ -10,9 +10,9 @@ import java.util.ArrayList;
  */
 public class Schedule 
 {
-    private ArrayList<Game> games; // List of games
-	private int numGamesInFullRound;       // The number of games in a full round
-	private int index = 0; // The index of the current game
+    private ArrayList<Game> games;   // List of games
+	private int numGamesInFullRound; // The number of games in a full round
+	private int index;               // The index of the current game
 	
 	/**
 	 * Constructor
@@ -24,13 +24,15 @@ public class Schedule
 	{
 		this.games = games;
 		this.numGamesInFullRound = numGamesInFullRound;
+		index = -1;
 	}
 
 	public Game getNextGame()
 	{
+		index++;
 		if(index >= games.size())
 			return null;
-		return games.get(index++);
+		return games.get(index);
 	}
 
 	/**
@@ -118,6 +120,11 @@ public class Schedule
 			else if(player == playerB)
 				playerB.setName(player.getName());
 		}
+	}
+
+	public void markGamePlayed()
+	{
+		games.get(index).markPlayed();
 	}
 	
 	/**

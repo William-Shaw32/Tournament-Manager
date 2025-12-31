@@ -20,16 +20,16 @@ public class Player
 	{
 		this.name = name;
 		this.colour = colour;
+		wins = 0;
+		gamesPlayed = 0;
+		ratio = 0.0;
+		ralliesWon = 0;
+		ralliesLost = 0;
 	}
 	
 	public String getName()
 	{
 		return name;
-	}
-
-	public void setName(String name)
-	{
-		this.name = name;
 	}
 
 	public Color getColour()
@@ -53,13 +53,24 @@ public class Player
 		return roundedRatio;
 	}
 
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+
 	public void updateStats(int gameRalliesWon, int gameRalliesLost)
 	{
 		gamesPlayed++;
 		ralliesWon += gameRalliesWon;
 		ralliesLost += gameRalliesLost;
-		if(ralliesLost == 0) ralliesLost = 1;
-		ratio = (double)ralliesWon / (double)ralliesLost;
+		if(ralliesLost == 0)
+		{
+			ralliesLost = 1;
+			ratio = (double)ralliesWon / (double)ralliesLost;
+			ralliesLost = 0;	
+		}
+		else
+			ratio = (double)ralliesWon / (double)ralliesLost;
 		if(gameRalliesWon > gameRalliesLost) wins++;
 	}
 }

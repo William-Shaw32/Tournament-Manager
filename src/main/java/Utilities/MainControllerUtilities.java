@@ -182,7 +182,7 @@ public class MainControllerUtilities
         editScheduleToggle.selectedProperty().addListener((obs, was, is) -> 
         {
             scheduleListView.pseudoClassStateChanged(EDIT_MODE, is);
-}       );
+        });
     }
 
     /**

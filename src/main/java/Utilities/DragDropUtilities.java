@@ -1,6 +1,8 @@
 package utilities;
 
 import java.util.concurrent.atomic.AtomicReference;
+
+import data_classes.Game;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.ListCell;
 import javafx.scene.image.Image;
@@ -95,17 +97,20 @@ public class DragDropUtilities
                 {   
                     super.updateItem(item, empty);
                     pseudoClassStateChanged(DROP_ABOVE, false);
-                    pseudoClassStateChanged(DROP_BELOW, false);      
-
+                    pseudoClassStateChanged(DROP_BELOW, false);
                     if (empty || item == null)
                     {
                         setText(null);
-                        setGraphic(null);
+                        setOpacity(1.0);       
                     }
                     else
                     {
-                        setGraphic(null);
                         setText(item.toString());
+                        // Dim played games
+                        if (item instanceof Game g)
+                            setOpacity(g.getPlayed() ? 0.40 : 1.0);
+                        else
+                            setOpacity(1.0);
                     }
                 }   
             };

@@ -10,6 +10,7 @@ public class Game
 	// The two players in a game
     private Player playerA;
 	private Player playerB;
+	private boolean played;
 	
 	/**
 	 * Constructor
@@ -29,6 +30,7 @@ public class Game
         	this.playerA = playerB;
         	this.playerB = playerA;
     	}
+		played = false;
 	}
 
 	/**
@@ -48,7 +50,17 @@ public class Game
 	{
 		return playerB;
 	}
+
+	public boolean getPlayed()
+	{
+		return played;
+	}
 	
+	public void markPlayed()
+	{
+		played = true;
+	}
+
 	/**
 	 * Overide of the toString() method
 	 * The schedule list-view uses toString() to display games in the cells of the list-view
