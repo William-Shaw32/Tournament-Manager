@@ -23,9 +23,13 @@ public class MainControllerUtilities
     // Pseudo css class for when the schedule list-view is put into edit mode
     private static final PseudoClass EDIT_MODE = PseudoClass.getPseudoClass("edit-mode");
 
-
-
-
+    public static void configureScoreToWinTextField(TextField scoreToWinTextField)
+    {
+        TextFormatter<String> formatter = new TextFormatter<>(change ->
+            change.getControlNewText().matches("\\d*") ? change : null
+        );
+        scoreToWinTextField.setTextFormatter(formatter);
+    }
 
     public static void configurePlayerSpinners(Spinner<Integer> spinner1, Spinner<Integer> spinner2)
     {

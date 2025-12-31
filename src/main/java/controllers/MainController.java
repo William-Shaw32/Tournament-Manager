@@ -64,6 +64,7 @@ public class MainController
     private Schedule schedule; 
     private Player selectedPlayer; 
     private Queue<Color> cachedColours = new ArrayDeque<>();
+    private Game nextGame;
     private Player playerA;
     private Player playerB;
 
@@ -72,6 +73,7 @@ public class MainController
     private BooleanProperty tournamentIsActive = new SimpleBooleanProperty(false);
     private int numGamesRemaining = 0;
     private int numColoursGenerated;
+    private int scoreToWin;
 
     /**
      * This is the initialize functiton for the main controller
@@ -84,7 +86,8 @@ public class MainController
         statsLabel.setVisible(false);
         startEndTournamentButton.setDisable(true);
         endGameButton.setDisable(true);
-        scoreToWinTextField.setDisable(true);
+        player1Spinner.setDisable(true);
+        player2Spinner.setDisable(true);
         root.setFocusTraversable(true);
         MainControllerUtilities.configurePlayerSpinners(player1Spinner, player2Spinner);
         // Configures the behaviour of the ganes each spinner
@@ -98,7 +101,7 @@ public class MainController
         );
         // Creates an event listener for viewing a different round
         roundsPagination.currentPageIndexProperty().addListener(
-        (obs, oldIndex, newIndex) -> displayRound()
+            (obs, oldIndex, newIndex) -> displayRound()
         );
         // Configures the dynamic behaviour of the schedule list view
         MainControllerUtilities.configureScheduleListView(scheduleListView, root, editScheduleToggle);
@@ -119,21 +122,31 @@ public class MainController
         MainControllerUtilities.configureAllTableColumns(nameColumn, winsColumn, playedColumn, ratioColumn);
         // Lister to cache the selected player whenever a row of the table view is selected
         playersTableView.getSelectionModel().selectedItemProperty().addListener(
-        (obs, oldP, newP) -> {
-            if (newP != null) selectedPlayer = newP;
-        }
+            (obs, oldP, newP) -> {
+                if (newP != null) selectedPlayer = newP;
+            }
         );
         // Binds remove player button disable to whether a player is selected or not
         removePlayerButton.disableProperty().bind(
             playersTableView.getSelectionModel().selectedItemProperty().isNull().or(tournamentIsActive)
         );
+        // Configures score to win texxt field to take only digits
+        MainControllerUtilities.configureScoreToWinTextField(scoreToWinTextField);
+        // Listens for changes in the score to win label
+        scoreToWinTextField.textProperty().addListener((obs, oldText, newText) -> {
+            if (newText == null || newText.isEmpty()) {
+                scoreToWin = 0;
+                return;
+            }
+            scoreToWin = Integer.parseInt(newText);
+        });
     }
+
 
 
     // ===========================================================================================================================================
     // Event Handlers
     // ===========================================================================================================================================
-
 
     /**
      * This function generates a schedule when the user clicks the generate schedule button
@@ -255,18 +268,12 @@ public class MainController
         scheduleConfigHBox.setDisable(true);
         addPlayerButton.setDisable(true);
         endGameButton.setDisable(false);
-        scoreToWinTextField.setDisable(false);
+        player1Spinner.setDisable(false);
+        player2Spinner.setDisable(false);
 
-        // Pull first game
-        Game nextGame = schedule.getNextGame();
-        playerA = nextGame.getPlayerA();
-        playerB = nextGame.getPlayerB();
-        player1ScoreLabel.setText(playerA.getName());
-        player2ScoreLabel.setText(playerB.getName());
-        Background b1 = new Background(new BackgroundFill(playerA.getColour(), CornerRadii.EMPTY, Insets.EMPTY));
-        Background b2 = new Background(new BackgroundFill(playerB.getColour(), CornerRadii.EMPTY, Insets.EMPTY));
-        player1ScoreLabel.setBackground(b1);
-        player2ScoreLabel.setBackground(b2);
+        // Pulls first game
+        nextGame = schedule.getNextGame();
+        loadNextGame();
     }
 
     /**
@@ -284,6 +291,7 @@ public class MainController
                 return;
         }
         tournamentIsActive.set(false);
+        clearScoreboard();
         startEndTournamentButton.setText("Start Tournament");
         schedule.clear();
         scheduleListView.getItems().clear();
@@ -295,7 +303,8 @@ public class MainController
         startEndTournamentButton.setDisable(true);
         roundsPagination.setPageCount(Pagination.INDETERMINATE);
         endGameButton.setDisable(true);
-        scoreToWinTextField.setDisable(true);
+        player1Spinner.setDisable(true);
+        player2Spinner.setDisable(true);
     }
 
     /**
@@ -377,38 +386,36 @@ public class MainController
     @FXML
     private void endGame()
     {
-        // Updating Stats
+        // Checks player scores
         int player1Score = player1Spinner.getValue();
         int player2Score = player2Spinner.getValue();
-
         if(player1Score == player2Score)
             return;
-        
-        if(player1Score > player2Score)
-        {
-            playerA.updateStats(player1Score, player2Score, true);
-            playerB.updateStats(player2Score, player1Score, false);
-        }
-        else
-        {
-           playerA.updateStats(player1Score, player2Score, false);
-           playerB.updateStats(player2Score, player1Score, true);
-        }
+        if(player1Score < scoreToWin && player2Score < scoreToWin)
+            return;
+
+        // Decrements the counter
+        numGamesRemaining--;
+        numGamesRemainingLabel.setText(Integer.toString(numGamesRemaining));
+
+        // Updates the player stats
+        playerA.updateStats(player1Score, player2Score);
+        playerB.updateStats(player2Score, player1Score);
         playersTableView.refresh();
 
-        // Pull next game
-        Game nextGame = schedule.getNextGame();
+        // Pulls next game
+        nextGame = schedule.getNextGame();
         if(nextGame == null)
         {
-            player1ScoreLabel.setText("");
-            player2ScoreLabel.setText("");
-            Background b = new Background(new BackgroundFill(Color.web("#243847"), CornerRadii.EMPTY, Insets.EMPTY));
-            player1ScoreLabel.setBackground(b);
-            player2ScoreLabel.setBackground(b);
-            player1Spinner.getValueFactory().setValue(0);
-            player2Spinner.getValueFactory().setValue(0);
+            clearScoreboard();
             return;
         }
+        loadNextGame();
+
+    }
+
+    private void loadNextGame()
+    {
         playerA = nextGame.getPlayerA();
         playerB = nextGame.getPlayerB();
         player1ScoreLabel.setText(playerA.getName());
@@ -419,6 +426,17 @@ public class MainController
         player2ScoreLabel.setBackground(b2);
         player1Spinner.getValueFactory().setValue(0);
         player2Spinner.getValueFactory().setValue(0);
+    }
+
+    private void clearScoreboard()
+    {
+        player1ScoreLabel.setText("");
+        player2ScoreLabel.setText("");
+        Background b = new Background(new BackgroundFill(Color.web("#243847"), CornerRadii.EMPTY, Insets.EMPTY));
+        player1ScoreLabel.setBackground(b);
+        player2ScoreLabel.setBackground(b);
+        player1Spinner.getValueFactory().setValue(0);
+        player2Spinner.getValueFactory().setValue(0);     
     }
 
 

@@ -15,9 +15,8 @@
 
 .score-spinner .text-field
 {
-    -fx-font-size: 24px;
+    -fx-font-size: 32px;
     -fx-font-family: "Segoe UI Black";
-
 }
 
 .spinner .increment-arrow-button,

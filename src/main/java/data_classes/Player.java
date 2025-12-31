@@ -53,13 +53,13 @@ public class Player
 		return roundedRatio;
 	}
 
-	public void updateStats(int gameRalliesWon, int gameRalliesLost, boolean wonGame)
+	public void updateStats(int gameRalliesWon, int gameRalliesLost)
 	{
 		gamesPlayed++;
 		ralliesWon += gameRalliesWon;
 		ralliesLost += gameRalliesLost;
 		if(ralliesLost == 0) ralliesLost = 1;
 		ratio = (double)ralliesWon / (double)ralliesLost;
-		if(wonGame) wins++;
+		if(gameRalliesWon > gameRalliesLost) wins++;
 	}
 }

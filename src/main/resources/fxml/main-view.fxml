@@ -98,6 +98,7 @@
                         <Font name="Gill Sans Ultra Bold" size="40.0" />
                      </font>
                   </Label>
+                  <Region prefHeight="41.0" prefWidth="907.0" />
                   <ImageView fx:id="bannerImage" fitHeight="91.0" fitWidth="200.0" pickOnBounds="true">
                      <image>
                         <Image url="@../images/space-table.png" />
@@ -106,50 +107,50 @@
                           <Rectangle arcHeight="30.0" arcWidth="30.0" height="91.0" width="200.0" />
                      </clip>
                   </ImageView>
-                  <Region prefHeight="144.0" prefWidth="908.0" />
+                  <Region prefHeight="110.0" prefWidth="907.0" />
                   <HBox alignment="CENTER" prefHeight="122.0" prefWidth="908.0">
                      <children>
                         <Region prefHeight="123.0" prefWidth="24.0" />
-                        <Label fx:id="player1ScoreLabel" alignment="CENTER" prefHeight="123.0" prefWidth="550.0" style="-fx-background-color: #243847;" textFill="WHITE">
+                        <Label fx:id="player1ScoreLabel" alignment="CENTER" prefHeight="123.0" prefWidth="500.0" style="-fx-background-color: #243847;" textFill="WHITE">
                            <font>
                               <Font name="Segoe UI Black Italic" size="36.0" />
                            </font>
                         </Label>
                         <Region prefHeight="123.0" prefWidth="11.0" />
-                        <Spinner fx:id="player1Spinner" prefHeight="123.0" prefWidth="158.0" styleClass="score-spinner" />
+                        <Spinner fx:id="player1Spinner" prefHeight="123.0" prefWidth="130.0" styleClass="score-spinner" />
                      </children>
                   </HBox>
                   <Region prefHeight="46.0" prefWidth="908.0" />
                   <HBox alignment="CENTER" prefHeight="122.0" prefWidth="721.0">
                      <children>
                         <Region prefHeight="123.0" prefWidth="24.0" />
-                        <Label fx:id="player2ScoreLabel" alignment="CENTER" prefHeight="123.0" prefWidth="550.0" style="-fx-background-color: #243847;" textFill="WHITE">
+                        <Label fx:id="player2ScoreLabel" alignment="CENTER" prefHeight="123.0" prefWidth="500.0" style="-fx-background-color: #243847;" textFill="WHITE">
                            <font>
                               <Font name="Segoe UI Black Italic" size="36.0" />
                            </font>
                         </Label>
                         <Region prefHeight="123.0" prefWidth="11.0" />
-                        <Spinner fx:id="player2Spinner" prefHeight="123.0" prefWidth="158.0" styleClass="score-spinner" />
+                        <Spinner fx:id="player2Spinner" prefHeight="123.0" prefWidth="130.0" styleClass="score-spinner" />
                      </children>
                   </HBox>
                   <Region prefHeight="73.0" prefWidth="908.0" />
                   <HBox alignment="CENTER" prefHeight="133.0" prefWidth="908.0">
                      <children>
-                        <Button fx:id="endGameButton" mnemonicParsing="false" onAction="#endGame" prefHeight="75.0" prefWidth="225.0" style="-fx-background-color: #243847;" text="END GAME" textFill="#3eb9f2">
+                        <Button fx:id="endGameButton" mnemonicParsing="false" onAction="#endGame" prefHeight="65.0" prefWidth="195.0" style="-fx-background-color: #243847;" text="END GAME" textFill="#3eb9f2">
                            <font>
-                              <Font name="Segoe UI Black Italic" size="28.0" />
+                              <Font name="Segoe UI Black Italic" size="24.0" />
                            </font>
                         </Button>
-                        <Region prefHeight="104.0" prefWidth="37.0" />
-                        <Label fx:id="statsLabel1" alignment="CENTER" prefHeight="75.0" prefWidth="225.0" text="SCORE TO WIN" textFill="#3eb9f2">
+                        <Region prefHeight="109.0" prefWidth="60.0" />
+                        <Label fx:id="statsLabel1" alignment="CENTER" prefHeight="65.0" prefWidth="195.0" text="SCORE TO WIN" textFill="#3eb9f2">
                            <font>
-                              <Font name="Segoe UI Black Italic" size="28.0" />
+                              <Font name="Segoe UI Black Italic" size="24.0" />
                            </font>
                         </Label>
                         <Region prefHeight="110.0" prefWidth="11.0" />
-                        <TextField fx:id="scoreToWinTextField" alignment="CENTER" prefHeight="67.0" prefWidth="102.0" style="-fx-background-color: #243847;">
+                        <TextField fx:id="scoreToWinTextField" alignment="CENTER" prefHeight="65.0" prefWidth="90.0" style="-fx-background-color: #243847;">
                            <font>
-                              <Font name="Segoe UI Black" size="24.0" />
+                              <Font name="Segoe UI Black Italic" size="24.0" />
                            </font>
                         </TextField>
                      </children>
@@ -162,13 +163,13 @@
                               <Font name="Segoe UI Black" size="20.0" />
                            </font>
                         </Button>
-                        <Region prefHeight="100.0" prefWidth="57.0" />
-                        <Label fx:id="gamesRemainingLabel" alignment="CENTER" prefHeight="75.0" prefWidth="225.0" text="Games Remaining" textFill="#3eb9f2" wrapText="true">
+                        <Region prefHeight="143.0" prefWidth="88.0" />
+                        <Label fx:id="gamesRemainingLabel" alignment="CENTER" prefHeight="75.0" prefWidth="209.0" text="Games Remaining:" textFill="#3eb9f2" wrapText="true">
                            <font>
                               <Font name="Segoe UI Black" size="20.0" />
                            </font>
                         </Label>
-                        <Label fx:id="numGamesRemainingLabel" alignment="CENTER" prefHeight="50.0" prefWidth="50.0" text="0" textFill="#3eb9f2">
+                        <Label fx:id="numGamesRemainingLabel" prefHeight="50.0" prefWidth="50.0" text="0" textFill="#3eb9f2">
                            <font>
                               <Font name="Segoe UI Black" size="28.0" />
                            </font>
