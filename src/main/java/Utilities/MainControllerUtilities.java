@@ -154,6 +154,21 @@ public class MainControllerUtilities
         return alert;
     }
 
+    public static Alert createClearKeepAlert(Alert.AlertType type, String title, String header, String content)
+    {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+        ButtonType clearButton = new ButtonType("Clear", ButtonBar.ButtonData.YES);
+        ButtonType keepButton  = new ButtonType("Keep", ButtonBar.ButtonData.NO);
+        ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+        alert.getButtonTypes().setAll(clearButton, keepButton, cancelButton);
+        DialogPane pane = alert.getDialogPane();
+        pane.getStylesheets().add(MainControllerUtilities.class.getResource("/css/main-view.css").toExternalForm());
+        return alert;
+    }
+
     /**
      * This function configures the dynamic behaviour of the schedule list view as well as its off-click behaviour
      * @param scheduleListView The schedule list view

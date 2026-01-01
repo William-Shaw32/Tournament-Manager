@@ -73,6 +73,15 @@ public class Player implements Comparable<Player>
 			ratio = (double)ralliesWon / (double)ralliesLost;
 		if(gameRalliesWon > gameRalliesLost) wins++;
 	}
+	
+	public void clearStats()
+	{
+		wins = 0;
+		gamesPlayed = 0;
+		ralliesWon = 0;
+		ralliesLost = 0;
+		ratio = 1.0;	
+	}
 
 	public int compareTo(Player otherPlayer)
 	{

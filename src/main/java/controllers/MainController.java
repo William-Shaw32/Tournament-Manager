@@ -297,9 +297,29 @@ public class MainController
             if (!result.isPresent() || result.get().getButtonData() == ButtonBar.ButtonData.CANCEL_CLOSE)
                 return;
         }
+        
+        Alert alert = MainControllerUtilities.createClearKeepAlert(
+                 Alert.AlertType.CONFIRMATION, "End Tournament", 
+                "Player Stats", 
+                "Would you like to clear the player stats?");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (!result.isPresent() || result.get().getButtonData() == ButtonBar.ButtonData.CANCEL_CLOSE)
+            return;
+        ButtonType chosen = result.get();
+        ButtonType clearButton = alert.getButtonTypes().get(0);
+        if(chosen == clearButton)
+        {
+            for(int i = 0; i < players.size(); i++)
+            {
+                players.get(i).clearStats();
+            } 
+            playersTableView.refresh();  
+            
+        } 
         tournamentIsActive.set(false);
         clearScoreboard();
         startEndTournamentButton.setText("Start Tournament");
+        currentGameIndex.set(0);
         schedule.clear();
         scheduleListView.getItems().clear();
         numGamesRemaining = 0;
@@ -400,6 +420,11 @@ public class MainController
             return;
         if(player1Score < scoreToWin && player2Score < scoreToWin)
             return;
+        if(numGamesRemaining <= 0)
+        {
+            clearScoreboard();
+            return;
+        }
 
         // Decrements the counter
         numGamesRemaining--;
