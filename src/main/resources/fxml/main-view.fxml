@@ -30,7 +30,7 @@
    <children>
       <HBox fx:id="mainHBox" alignment="CENTER" prefHeight="1044.0" prefWidth="1707.0" style="-fx-background-color: #1b1f23;" StackPane.alignment="TOP_CENTER">
          <children>
-            <VBox fx:id="leftVBox" alignment="TOP_CENTER" minWidth="400.0" prefHeight="1044.0" prefWidth="500.0">
+            <VBox fx:id="leftVBox" alignment="TOP_CENTER" prefHeight="1044.0" prefWidth="400.0">
                <padding>
                   <Insets left="24.0" />
                </padding>
@@ -38,7 +38,7 @@
                   <VBox fx:id="leftTopVBox" alignment="TOP_CENTER" prefHeight="230.0" prefWidth="376.0">
                      <children>
                         <Region minHeight="40.0" prefHeight="40.0" prefWidth="376.0" />
-                        <Label fx:id="playersLabel" prefHeight="0.0" prefWidth="131.0" text="Players" textFill="#3eb9f2">
+                        <Label fx:id="playersLabel" minWidth="131.0" prefHeight="0.0" prefWidth="131.0" text="Players" textFill="#3eb9f2">
                            <font>
                               <Font name="Gill Sans Ultra Bold" size="28.0" />
                            </font>
@@ -46,13 +46,13 @@
                         <Region minHeight="20.0" prefHeight="20.0" prefWidth="376.0" />
                         <HBox alignment="TOP_CENTER" minHeight="0.0" prefHeight="50.0" prefWidth="376.0">
                            <children>
-                              <Button fx:id="addPlayerButton" mnemonicParsing="false" onAction="#addPlayer" prefHeight="50.0" prefWidth="150.0" style="-fx-background-color: #243847;" text="Add" textFill="#3eb9f2">
+                              <Button fx:id="addPlayerButton" minWidth="120.0" mnemonicParsing="false" onAction="#addPlayer" prefHeight="50.0" prefWidth="150.0" style="-fx-background-color: #243847;" text="Add" textFill="#3eb9f2">
                                  <font>
                                     <Font name="Segoe UI Black" size="20.0" />
                                  </font>
                               </Button>
-                              <Region prefHeight="0.0" prefWidth="40.0" />
-                              <Button fx:id="removePlayerButton" mnemonicParsing="false" onAction="#removePlayer" prefHeight="50.0" prefWidth="150.0" style="-fx-background-color: #243847;" text="Remove" textFill="#3eb9f2">
+                              <Region minWidth="15.0" prefHeight="0.0" prefWidth="40.0" />
+                              <Button fx:id="removePlayerButton" minWidth="120.0" mnemonicParsing="false" onAction="#removePlayer" prefHeight="50.0" prefWidth="150.0" style="-fx-background-color: #243847;" text="Remove" textFill="#3eb9f2">
                                  <font>
                                     <Font name="Segoe UI Black" size="20.0" />
                                  </font>
@@ -69,7 +69,7 @@
                   </VBox>
                   <VBox fx:id="leftCenterVBox" prefWidth="376.0">
                      <children>
-                        <TableView fx:id="playersTableView" editable="true" fixedCellSize="72.0" prefHeight="400.0" prefWidth="476.0" style="-fx-background-color: #243847;">
+                        <TableView fx:id="playersTableView" editable="true" fixedCellSize="72.0" prefHeight="400.0" prefWidth="376.0" style="-fx-background-color: #243847;">
                            <placeholder>
                               <Label text="" />
                            </placeholder>
@@ -91,7 +91,8 @@
                   </VBox>  
                </children>
             </VBox>
-            <VBox fx:id="centerVBox" alignment="CENTER" prefHeight="1044.0" prefWidth="1180.0">
+            <Region minWidth="15.0" prefHeight="200.0" prefWidth="15.0" />
+            <VBox fx:id="centerVBox" alignment="CENTER" prefHeight="1044.0" prefWidth="876.0">
                <children>
                   <Label fx:id="bannerLabel" alignment="CENTER" prefHeight="95.0" prefWidth="1476.0" text="Tournament Master 2" textFill="#3eb9f2">
                      <font>
@@ -115,8 +116,8 @@
                               <Font name="Segoe UI Black Italic" size="36.0" />
                            </font>
                         </Label>
-                        <Region prefHeight="123.0" prefWidth="11.0" />
-                        <Spinner fx:id="player1Spinner" prefHeight="123.0" prefWidth="130.0" styleClass="score-spinner" />
+                        <Region minWidth="10.0" prefHeight="123.0" prefWidth="10.0" />
+                        <Spinner fx:id="player1Spinner" minWidth="130.0" prefHeight="123.0" prefWidth="130.0" styleClass="score-spinner" />
                      </children>
                   </HBox>
                   <Region prefHeight="46.0" prefWidth="908.0" />
@@ -127,26 +128,26 @@
                               <Font name="Segoe UI Black Italic" size="36.0" />
                            </font>
                         </Label>
-                        <Region prefHeight="123.0" prefWidth="11.0" />
-                        <Spinner fx:id="player2Spinner" prefHeight="123.0" prefWidth="130.0" styleClass="score-spinner" />
+                        <Region minWidth="10.0" prefHeight="123.0" prefWidth="10.0" />
+                        <Spinner fx:id="player2Spinner" minWidth="130.0" prefHeight="123.0" prefWidth="130.0" styleClass="score-spinner" />
                      </children>
                   </HBox>
                   <Region prefHeight="73.0" prefWidth="908.0" />
                   <HBox alignment="CENTER" prefHeight="133.0" prefWidth="908.0">
                      <children>
-                        <Button fx:id="endGameButton" mnemonicParsing="false" onAction="#endGame" prefHeight="65.0" prefWidth="195.0" style="-fx-background-color: #243847;" text="END GAME" textFill="#3eb9f2">
+                        <Button fx:id="endGameButton" minWidth="165.0" mnemonicParsing="false" onAction="#endGame" prefHeight="65.0" prefWidth="195.0" style="-fx-background-color: #243847;" text="END GAME" textFill="#3eb9f2">
                            <font>
                               <Font name="Segoe UI Black Italic" size="24.0" />
                            </font>
                         </Button>
                         <Region prefHeight="109.0" prefWidth="60.0" />
-                        <Label fx:id="statsLabel1" alignment="CENTER" prefHeight="65.0" prefWidth="195.0" text="SCORE TO WIN" textFill="#3eb9f2">
+                        <Label fx:id="statsLabel1" alignment="CENTER" minWidth="180.0" prefHeight="65.0" prefWidth="180.0" text="SCORE TO WIN" textFill="#3eb9f2">
                            <font>
                               <Font name="Segoe UI Black Italic" size="24.0" />
                            </font>
                         </Label>
                         <Region prefHeight="110.0" prefWidth="11.0" />
-                        <TextField fx:id="scoreToWinTextField" alignment="CENTER" prefHeight="65.0" prefWidth="90.0" style="-fx-background-color: #243847;">
+                        <TextField fx:id="scoreToWinTextField" alignment="CENTER" minWidth="90.0" prefHeight="65.0" prefWidth="90.0" style="-fx-background-color: #243847;">
                            <font>
                               <Font name="Segoe UI Black Italic" size="24.0" />
                            </font>
@@ -176,19 +177,21 @@
                   </HBox>
                </children>
             </VBox>
-            <VBox fx:id="rightVBox" alignment="TOP_CENTER" minWidth="400.0" prefWidth="500.0">
+            <Region minWidth="15.0" prefHeight="200.0" prefWidth="15.0" />
+            <VBox fx:id="rightVBox" alignment="TOP_CENTER" prefHeight="1044.0" prefWidth="400.0">
                <children>
                   <VBox fx:id="rightTopVBox" prefHeight="230.0" prefWidth="376.0">
                      <children>
                         <Region minHeight="40.0" prefHeight="40.0" prefWidth="321.0" />
-                        <HBox alignment="CENTER_RIGHT" prefHeight="0.0" prefWidth="376.0">
+                        <HBox alignment="CENTER" prefHeight="0.0" prefWidth="376.0">
                            <children>
-                              <Label alignment="CENTER" prefHeight="0.0" prefWidth="215.0" text="Schedule" textFill="#3eb9f2">
+                              <Region minWidth="43.0" prefHeight="35.0" prefWidth="140.0" />
+                              <Label alignment="CENTER" minWidth="160.0" prefHeight="35.0" prefWidth="160.0" text="Schedule" textFill="#3eb9f2">
                                  <font>
                                     <Font name="Gill Sans Ultra Bold" size="28.0" />
                                  </font>
                               </Label>
-                              <Region prefHeight="86.0" prefWidth="29.0" />
+                              <Region minWidth="15.0" prefHeight="35.0" prefWidth="91.0" />
                               <ToggleButton fx:id="hideScheduleToggle" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0" maxHeight="22" maxWidth="28" minHeight="22" minWidth="28" onAction="#toggleHideSchedule" prefHeight="22" prefWidth="28" text="">
                                  <graphic>
                                     <StackPane alignment="CENTER" maxHeight="22" maxWidth="28" minHeight="22" minWidth="28" prefHeight="22" prefWidth="28">
@@ -197,20 +200,19 @@
                                     </StackPane>
                                  </graphic>
                               </ToggleButton>
-                              <Region prefHeight="86.0" prefWidth="18.0" />
                            </children>
                         </HBox>
                         <Region minHeight="20.0" prefHeight="20.0" prefWidth="321.0" />
                         <HBox fx:id="scheduleConfigHBox" alignment="CENTER" prefHeight="46.0" prefWidth="376.0">   
                            <children>
-                              <Label prefHeight="46.0" prefWidth="54.0" text="Games Each" textFill="#3eb9f2" wrapText="true">
+                              <Label minWidth="54.0" prefHeight="46.0" prefWidth="54.0" text="Games Each" textFill="#3eb9f2" wrapText="true">
                                  <font>
                                     <Font name="Segoe UI Black" size="14.0" />
                                  </font>
                               </Label>
-                              <Spinner fx:id="gamesEachSpinner" editable="true" prefHeight="45.0" prefWidth="83.0" />
-                              <Region prefHeight="46.0" prefWidth="44.0" />
-                              <Button fx:id="generateScheduleButton" mnemonicParsing="false" onAction="#generateSchedule" prefHeight="50.0" prefWidth="150.0" style="-fx-background-color: #243847;" styleClass="generate-button" text="Generate" textFill="#3eb9f2">
+                              <Spinner fx:id="gamesEachSpinner" editable="true" minWidth="80.0" prefHeight="45.0" prefWidth="80.0" />
+                              <Region minWidth="15.0" prefHeight="46.0" prefWidth="45.0" />
+                              <Button fx:id="generateScheduleButton" minWidth="120.0" mnemonicParsing="false" onAction="#generateSchedule" prefHeight="46.0" prefWidth="150.0" style="-fx-background-color: #243847;" styleClass="generate-button" text="Generate" textFill="#3eb9f2">
                                  <font>
                                     <Font name="Segoe UI Black" size="20.0" />
                                  </font>
@@ -220,20 +222,20 @@
                         <Region prefHeight="40.0" prefWidth="376.0" />
                         <HBox fx:id="roundsHBox" alignment="CENTER_LEFT" prefHeight="20.0" prefWidth="376.0">
                            <children>
-                              <Region prefHeight="48.0" prefWidth="10.0" />
-                              <Label alignment="CENTER_RIGHT" prefHeight="61.0" prefWidth="213.0" text="Round" textFill="#3eb9f2">
+                              <Region minWidth="43.0" prefHeight="40.0" prefWidth="134.0" />
+                              <Label alignment="CENTER_RIGHT" minWidth="90.0" prefHeight="40.0" prefWidth="90.0" text="Round" textFill="#3eb9f2">
                                  <font>
                                     <Font name="Segoe UI Black" size="28.0" />
                                  </font>
                               </Label>
-                              <Region prefHeight="100.0" prefWidth="15.0" />
-                              <Label fx:id="roundNumLabel" prefHeight="48.0" prefWidth="23.0" text="n" textFill="#3eb9f2">
+                              <Region minWidth="15.0" prefHeight="100.0" prefWidth="15.0" />
+                              <Label fx:id="roundNumLabel" minWidth="35.0" prefHeight="48.0" prefWidth="35.0" text="n" textFill="#3eb9f2">
                                  <font>
                                     <Font name="Segoe UI Black" size="28.0" />
                                  </font>
                               </Label>
-                              <Region prefHeight="61.0" prefWidth="67.0" />
-                              <ToggleButton fx:id="editScheduleToggle" onAction="#toggleEditSchedule" prefHeight="22.0" prefWidth="28.0" styleClass="icon-toggle" text="">
+                              <Region minWidth="15.0" prefHeight="40.0" prefWidth="70.0" />
+                              <ToggleButton fx:id="editScheduleToggle" minWidth="28.0" onAction="#toggleEditSchedule" prefHeight="22.0" prefWidth="28.0" styleClass="icon-toggle" text="">
                                  <graphic>
                                     <SVGPath content="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z" styleClass="edit-icon" />
                                  </graphic>
