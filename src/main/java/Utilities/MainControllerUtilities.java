@@ -2,16 +2,37 @@ package utilities;
 
 import data_classes.Game;
 import data_classes.Player;
+
 import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.css.PseudoClass;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.util.converter.DefaultStringConverter;
-import javafx.scene.control.*;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.control.TextField;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.control.Button;
+import javafx.scene.control.Alert;
+import javafx.scene.control.DialogPane;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ListView;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.Pagination;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TableRow;
+import javafx.scene.control.TableColumn;
 import javafx.event.EventHandler;
 
 /**

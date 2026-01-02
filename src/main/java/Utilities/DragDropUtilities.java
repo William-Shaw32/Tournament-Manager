@@ -1,8 +1,5 @@
 package utilities;
 
-import java.util.concurrent.atomic.AtomicReference;
-
-import data_classes.Game;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.ListCell;
 import javafx.scene.image.Image;
@@ -15,9 +12,11 @@ import javafx.scene.control.ListView;
 import javafx.css.PseudoClass;
 import javafx.scene.Node;
 
+import data_classes.Game;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;

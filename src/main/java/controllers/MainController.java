@@ -1,8 +1,13 @@
 package controllers;
 
 // Custom imports
-import data_classes.*;
-import utilities.*;
+import data_classes.Player;
+import data_classes.Game;
+import data_classes.Schedule;
+import data_classes.ScheduleBuilder;
+import utilities.MainControllerUtilities;
+import utilities.DragDropUtilities;
+import utilities.DynamicColouringUtilities;
 
 // Java imports
 import java.util.ArrayDeque;
@@ -15,8 +20,25 @@ import java.util.Queue;
 // Javafx imports
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
-import javafx.scene.control.*;
-import javafx.scene.layout.*;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.Pagination;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.Button;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TextField;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;

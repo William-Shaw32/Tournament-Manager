@@ -2,7 +2,9 @@ package terminal_testing;
 
 import java.util.ArrayList;
 
-import data_classes.*;
+import data_classes.Player;
+import data_classes.Schedule;
+import data_classes.ScheduleBuilder;
 
 /**
  * This class can be used to test the schedule builder in the terminal
