@@ -94,12 +94,12 @@
             <Region minWidth="15.0" prefHeight="200.0" prefWidth="15.0" />
             <VBox fx:id="centerVBox" alignment="CENTER" prefHeight="1044.0" prefWidth="876.0">
                <children>
-                  <Label fx:id="bannerLabel" alignment="CENTER" minWidth="-Infinity" prefHeight="53.0" prefWidth="545.0" text="Tournament Master 2" textFill="#3eb9f2">
+                  <Label fx:id="bannerLabel" alignment="CENTER" minWidth="-Infinity" prefHeight="0.0" prefWidth="545.0" text="Tournament Master 2" textFill="#3eb9f2">
                      <font>
                         <Font name="Gill Sans Ultra Bold" size="40.0" />
                      </font>
                   </Label>
-                  <Region prefHeight="41.0" prefWidth="907.0" />
+                  <Region minHeight="20.0" prefHeight="20.0" prefWidth="907.0" />
                   <ImageView fx:id="bannerImage" fitHeight="91.0" fitWidth="200.0" pickOnBounds="true">
                      <image>
                         <Image url="@../images/space-table.png" />
@@ -108,67 +108,67 @@
                           <Rectangle arcHeight="30.0" arcWidth="30.0" height="91.0" width="200.0" />
                      </clip>
                   </ImageView>
-                  <Region prefHeight="110.0" prefWidth="907.0" />
+                  <Region minHeight="20.0" prefHeight="110.0" prefWidth="907.0" />
                   <HBox alignment="CENTER" prefHeight="122.0" prefWidth="908.0">
                      <children>
-                        <Label fx:id="player1ScoreLabel" alignment="CENTER" prefHeight="123.0" prefWidth="500.0" style="-fx-background-color: #243847;" textFill="WHITE">
+                        <Label fx:id="player1ScoreLabel" alignment="CENTER" minHeight="104.0" prefHeight="104.0" prefWidth="500.0" style="-fx-background-color: #243847;" textFill="WHITE">
                            <font>
                               <Font name="Segoe UI Black Italic" size="36.0" />
                            </font>
                         </Label>
                         <Region minWidth="10.0" prefHeight="123.0" prefWidth="10.0" />
-                        <Spinner fx:id="player1Spinner" minWidth="130.0" prefHeight="123.0" prefWidth="130.0" styleClass="score-spinner" />
+                        <Spinner fx:id="player1Spinner" minHeight="104.0" minWidth="130.0" prefHeight="104.0" prefWidth="130.0" styleClass="score-spinner" />
                      </children>
                   </HBox>
-                  <Region prefHeight="46.0" prefWidth="908.0" />
+                  <Region minHeight="20.0" prefHeight="20.0" prefWidth="908.0" />
                   <HBox alignment="CENTER" prefHeight="122.0" prefWidth="721.0">
                      <children>
-                        <Label fx:id="player2ScoreLabel" alignment="CENTER" prefHeight="123.0" prefWidth="500.0" style="-fx-background-color: #243847;" textFill="WHITE">
+                        <Label fx:id="player2ScoreLabel" alignment="CENTER" minHeight="104.0" prefHeight="104.0" prefWidth="500.0" style="-fx-background-color: #243847;" textFill="WHITE">
                            <font>
                               <Font name="Segoe UI Black Italic" size="36.0" />
                            </font>
                         </Label>
                         <Region minWidth="10.0" prefHeight="123.0" prefWidth="10.0" />
-                        <Spinner fx:id="player2Spinner" minWidth="130.0" prefHeight="123.0" prefWidth="130.0" styleClass="score-spinner" />
+                        <Spinner fx:id="player2Spinner" minHeight="104.0" minWidth="130.0" prefHeight="104.0" prefWidth="130.0" styleClass="score-spinner" />
                      </children>
                   </HBox>
-                  <Region prefHeight="73.0" prefWidth="908.0" />
+                  <Region minHeight="20.0" prefHeight="73.0" prefWidth="908.0" />
                   <HBox alignment="CENTER" prefHeight="133.0" prefWidth="908.0">
                      <children>
-                        <Button fx:id="endGameButton" minWidth="165.0" mnemonicParsing="false" onAction="#endGame" prefHeight="65.0" prefWidth="195.0" style="-fx-background-color: #243847;" text="END GAME" textFill="#3eb9f2">
+                        <Button fx:id="endGameButton" minHeight="66.0" minWidth="165.0" mnemonicParsing="false" onAction="#endGame" prefHeight="66.0" prefWidth="195.0" style="-fx-background-color: #243847;" text="END GAME" textFill="#3eb9f2">
                            <font>
                               <Font name="Segoe UI Black Italic" size="24.0" />
                            </font>
                         </Button>
                         <Region prefHeight="109.0" prefWidth="60.0" />
-                        <Label fx:id="statsLabel1" alignment="CENTER" minWidth="-Infinity" prefHeight="65.0" prefWidth="180.0" text="SCORE TO WIN" textFill="#3eb9f2">
+                        <Label fx:id="statsLabel1" alignment="CENTER" minHeight="66.0" minWidth="-Infinity" prefHeight="66.0" prefWidth="180.0" text="SCORE TO WIN" textFill="#3eb9f2">
                            <font>
                               <Font name="Segoe UI Black Italic" size="24.0" />
                            </font>
                         </Label>
                         <Region prefHeight="110.0" prefWidth="11.0" />
-                        <TextField fx:id="scoreToWinTextField" alignment="CENTER" minWidth="90.0" prefHeight="65.0" prefWidth="90.0" style="-fx-background-color: #243847;">
+                        <TextField fx:id="scoreToWinTextField" alignment="CENTER" minHeight="66.0" minWidth="90.0" prefHeight="66.0" prefWidth="90.0" style="-fx-background-color: #243847;">
                            <font>
                               <Font name="Segoe UI Black Italic" size="24.0" />
                            </font>
                         </TextField>
                      </children>
                   </HBox>
-                  <Region prefHeight="267.0" prefWidth="908.0" />
+                  <Region minHeight="20.0" prefHeight="267.0" prefWidth="908.0" />
                   <HBox fx:id="bottomHBox" alignment="CENTER" prefHeight="165.0" prefWidth="708.0">
                      <children>
-                        <Button fx:id="startEndTournamentButton" mnemonicParsing="false" onAction="#startEndTournament" prefHeight="75.0" prefWidth="225.0" style="-fx-background-color: #243847;" text="Start Tournament" textFill="#3eb9f2" wrapText="true">
+                        <Button fx:id="startEndTournamentButton" minHeight="76.0" mnemonicParsing="false" onAction="#startEndTournament" prefHeight="76.0" prefWidth="225.0" style="-fx-background-color: #243847;" text="Start Tournament" textFill="#3eb9f2" wrapText="true">
                            <font>
                               <Font name="Segoe UI Black" size="20.0" />
                            </font>
                         </Button>
                         <Region prefHeight="143.0" prefWidth="88.0" />
-                        <Label fx:id="gamesRemainingLabel" alignment="CENTER" minWidth="-Infinity" prefHeight="75.0" prefWidth="209.0" text="Games Remaining:" textFill="#3eb9f2" wrapText="true">
+                        <Label fx:id="gamesRemainingLabel" alignment="CENTER" minHeight="76.0" minWidth="-Infinity" prefHeight="76.0" prefWidth="209.0" text="Games Remaining:" textFill="#3eb9f2" wrapText="true">
                            <font>
                               <Font name="Segoe UI Black" size="20.0" />
                            </font>
                         </Label>
-                        <Label fx:id="numGamesRemainingLabel" minWidth="-Infinity" prefHeight="50.0" prefWidth="50.0" text="0" textFill="#3eb9f2">
+                        <Label fx:id="numGamesRemainingLabel" minHeight="76.0" minWidth="-Infinity" prefHeight="76.0" prefWidth="50.0" text="0" textFill="#3eb9f2">
                            <font>
                               <Font name="Segoe UI Black" size="28.0" />
                            </font>
@@ -247,7 +247,7 @@
                   <VBox fx:id="rightCenterVBox" prefWidth="341.0" VBox.vgrow="NEVER">
                      <children>
                         <ListView id="scheduleListView" fx:id="scheduleListView" maxHeight="1.7976931348623157E308" prefWidth="341.0" style="-fx-background-color: #243847;" VBox.vgrow="ALWAYS" />
-                        <Region fx:id="paginationVSpacer" prefHeight="24.0" prefWidth="321.0" />
+                        <Region fx:id="paginationVSpacer" minHeight="24.0" prefHeight="24.0" prefWidth="321.0" />
                         <Pagination fx:id="roundsPagination" maxPageIndicatorCount="3" prefHeight="0.0" prefWidth="321.0" />
                      </children>
                   </VBox>
