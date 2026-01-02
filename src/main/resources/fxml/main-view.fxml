@@ -110,7 +110,6 @@
                   <Region prefHeight="110.0" prefWidth="907.0" />
                   <HBox alignment="CENTER" prefHeight="122.0" prefWidth="908.0">
                      <children>
-                        <Region prefHeight="123.0" prefWidth="24.0" />
                         <Label fx:id="player1ScoreLabel" alignment="CENTER" prefHeight="123.0" prefWidth="500.0" style="-fx-background-color: #243847;" textFill="WHITE">
                            <font>
                               <Font name="Segoe UI Black Italic" size="36.0" />
@@ -123,7 +122,6 @@
                   <Region prefHeight="46.0" prefWidth="908.0" />
                   <HBox alignment="CENTER" prefHeight="122.0" prefWidth="721.0">
                      <children>
-                        <Region prefHeight="123.0" prefWidth="24.0" />
                         <Label fx:id="player2ScoreLabel" alignment="CENTER" prefHeight="123.0" prefWidth="500.0" style="-fx-background-color: #243847;" textFill="WHITE">
                            <font>
                               <Font name="Segoe UI Black Italic" size="36.0" />

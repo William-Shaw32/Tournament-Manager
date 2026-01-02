@@ -25,6 +25,11 @@ public class Schedule
 		this.numGamesInFullRound = numGamesInFullRound;
 	}
 
+	/**
+	 * Returns a game from the list of games by index
+	 * @param index The index of the requested game
+	 * @return The requested game
+	 */
 	public Game getGame(int index)
 	{
 		if(index >= games.size())
@@ -119,6 +124,10 @@ public class Schedule
 		}
 	}
 
+	/**
+	 * Marks a game as played in the schedule by index
+	 * @param index The index of the game to be marked as played
+	 */
 	public void markGamePlayed(int index)
 	{
 		games.get(index).markPlayed();

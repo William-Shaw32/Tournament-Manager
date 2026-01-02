@@ -10,7 +10,7 @@ public class Game
 	// The two players in a game
     private Player playerA;
 	private Player playerB;
-	private boolean played;
+	private boolean played; // True if the game has already been played, false if it has not been played
 	
 	/**
 	 * Constructor
@@ -51,11 +51,19 @@ public class Game
 		return playerB;
 	}
 
+	/**
+	 * Getter for played
+	 * @return True if the game has already been played, false if it has not been played
+	
+	 */
 	public boolean getPlayed()
 	{
-		return played;
+		return played; 
 	}
 	
+	/**
+	 * Mutator to set played to true
+	 */
 	public void markPlayed()
 	{
 		played = true;
@@ -64,6 +72,7 @@ public class Game
 	/**
 	 * Overide of the toString() method
 	 * The schedule list-view uses toString() to display games in the cells of the list-view
+	 * @return How the game should be presented as a string (playerA VS player B)
 	 */
 	@Override
 	public String toString()

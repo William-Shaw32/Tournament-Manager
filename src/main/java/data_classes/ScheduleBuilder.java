@@ -71,7 +71,7 @@ public class ScheduleBuilder
 		
 		/**
 		 * Sums the number of matches each player has already been scheduled in (Greedy heuristic)
-		 * @return
+		 * @return Sum of the number of matches each player has already been scheduled in
 		 */
 		private int sumNumMatchesIn()
 		{
@@ -80,7 +80,7 @@ public class ScheduleBuilder
 		
 		/**
 		 * Sums the indices of the last match each player was scheduled in (Greedy heuristic)
-		 * @return
+		 * @return Sum of the indices of the last match each player was scheduled in
 		 */
 		public int sumLastMatchIndices()
 		{
@@ -100,8 +100,8 @@ public class ScheduleBuilder
 
 		/**
 		 * Undoes the schedulee info after backtracking (Partial round only)
-		 * @param oldLastMatchIndexA
-		 * @param oldLastMatchIndexB
+		 * @param oldLastMatchIndexA The old last match index of schedulee A before backtracking
+		 * @param oldLastMatchIndexB The old last match index of schedulee B before backtracking
 		 */
 		public void undoScheduleeInfoAfterRemoval(int oldLastMatchIndexA, int oldLastMatchIndexB)
 		{

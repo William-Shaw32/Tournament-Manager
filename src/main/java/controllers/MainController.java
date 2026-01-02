@@ -1,5 +1,10 @@
 package controllers;
 
+// Custom imports
+import data_classes.*;
+import utilities.*;
+
+// Java imports
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -7,12 +12,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.Queue;
 
-import data_classes.*;
+// Javafx imports
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import utilities.*;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
@@ -149,7 +153,7 @@ public class MainController
 
 
     // ===========================================================================================================================================
-    // Event Handlers
+    // Event Handlers (Called through fxml)
     // ===========================================================================================================================================
 
     /**
@@ -199,22 +203,6 @@ public class MainController
             return;    
         }
     }  
-    
-    /**
-     * This is a callback function to reorder a game in the schedule. It is called when the user drags and drops a game into a new position
-     * @param dragIndex The list-view index of the cell that was dragged
-     * @param dropIndex The list-view index of where the cell was dropped
-     */
-    private void reorderGame(int oldIndex, int newIndex)
-    {
-        schedule.changeGameIndex(oldIndex, newIndex);
-        displayRound();
-        if(oldIndex == currentGameIndex.get() || newIndex == currentGameIndex.get())
-        {
-            currentGame = schedule.getGame(currentGameIndex.get());  
-            loadCurrentGame();  
-        }
-    }
 
     /**
      * This function hides or shows the schedule when the user clicks the toggle schedule button
@@ -264,7 +252,177 @@ public class MainController
         else if(tournamentIsActive.get() == true)
             endTournament();
     }
+
+    /**
+     * This function is called when the user presses the add player button
+     * It creates an empty player with a dynamically generated colour
+     * @param e The action-event that triggered the handler
+     */
+    @FXML
+    private void addPlayer(ActionEvent e)
+    {
+        playersTableView.setVisible(true);
+        statsLabel.setVisible(true);
+        String name = "Player " + (players.size()+1);
+        Color colour = null;
+        if(!cachedColours.isEmpty())
+            colour = cachedColours.poll();
+        else
+        {
+            colour = DynamicColouringUtilities.generateNextColour(numColoursGenerated);
+            numColoursGenerated++;
+        }
+        numColoursGenerated++;
+        Player newPlayer = new Player(name, colour);
+        players.add(newPlayer);
+        playersTableView.getItems().add(newPlayer); 
+        MainControllerUtilities.resizePlayersTable(playersTableView, rightVBox, rightTopVBox); 
+        if(players.size() >= 2)
+        {
+            gamesEachSpinner.getValueFactory().setValue(players.size()-1);
+            gamesEachSpinner.getEditor().setText(String.valueOf(players.size()-1));
+            gamesEachSpinner.setDisable(false);
+            generateScheduleButton.setDisable(false);
+        }
+    }
+
+    /**
+     * This function is called when the user presses the remove player button
+     * It removes the selected player from the players list and the players table
+     * It caches their colour for reuse when adding new players
+     * @param e The action-event that triggered the handler
+     */
+    @FXML
+    private void removePlayer(ActionEvent e)
+    {
+        players.remove(selectedPlayer);
+        cachedColours.offer(selectedPlayer.getColour());
+        playersTableView.getItems().setAll(players);
+        MainControllerUtilities.resizePlayersTable(playersTableView, rightVBox, rightTopVBox);
+        gamesEachSpinner.getValueFactory().setValue(players.size()-1);
+        gamesEachSpinner.getEditor().setText(String.valueOf(players.size()-1));
+        if(schedule != null && !schedule.isEmpty())
+        {
+            schedule.clear();
+            scheduleListView.getItems().clear();
+            generateScheduleButton.setText("Generate");
+            numGamesRemaining = 0;
+            numGamesRemainingLabel.setText(Integer.toString(numGamesRemaining));
+            roundsPagination.setPageCount(Pagination.INDETERMINATE);
+            startEndTournamentButton.setDisable(true);
+        } 
+        if(players.size() < 2)
+        {
+            gamesEachSpinner.setDisable(true);
+            generateScheduleButton.setDisable(true);
+            gamesEachSpinner.getEditor().clear();
+        }
+    }
+
+    /**
+     * This function is called when the user commits a name to the name column in the players table
+     * It updates their name in the table and cascades to update their name in the schedule as well
+     * @param e The event that triggered the handler
+     */
+    @FXML
+    private void onNameEditCommit(TableColumn.CellEditEvent<Player, String> e) 
+    {
+        Player player = e.getRowValue();
+        player.setName(e.getNewValue());
+        playersTableView.refresh();
+        if(schedule == null || schedule.isEmpty())
+            return;
+        schedule.updatePlayerName(player);
+        displayRound();
+    }
+
+
+    /**
+     * This function is called when the user presses the end game button
+     * It ends the current game, updates the player stats, and loads the next game from the schedule
+     * @param e The action-event that triggered the handler
+     */ 
+    @FXML
+    private void endGame(ActionEvent e)
+    {  
+        // Checks player scores
+        int player1Score = player1Spinner.getValue();
+        int player2Score = player2Spinner.getValue();
+        if(player1Score == player2Score)
+        {
+            MainControllerUtilities.createBasicAlert(
+                Alert.AlertType.WARNING, "Warning", 
+                "Score Tied", 
+                "Unable to end game while the score is tied").showAndWait();
+            return; 
+        }
+        if(player1Score < scoreToWin && player2Score < scoreToWin)
+        {
+            Optional<ButtonType> result = MainControllerUtilities.createDecisionAlert(
+                 Alert.AlertType.WARNING, "Warning", 
+                "Winner not above the score to win", 
+                "Are you sure you want to end the game?").showAndWait();
+            if (!result.isPresent() || result.get().getButtonData() == ButtonBar.ButtonData.CANCEL_CLOSE)
+                return;
+        }
+
+        // Decrements the counter
+        numGamesRemaining--;
+        numGamesRemainingLabel.setText(Integer.toString(numGamesRemaining));
+
+        // Updates the player stats
+        playerA.updateStats(player1Score, player2Score);
+        playerB.updateStats(player2Score, player1Score);
+        players.sort(null);
+        playersTableView.getItems().setAll(players);
+        playersTableView.refresh();
+
+        schedule.markGamePlayed(currentGameIndex.get());
+        scheduleListView.refresh();
+
+        // Pulls next game
+        currentGameIndex.set(currentGameIndex.get() + 1);
+        currentGame = schedule.getGame(currentGameIndex.get());
+        if(currentGame == null)
+        {
+            clearScoreboard();
+            return;
+        }
+        loadCurrentGame();
+    }
+
+
+    // ===========================================================================================================================================
+    // Internal controller methods
+    // ===========================================================================================================================================
     
+
+    /**
+     * This function displays a single round to the screen 
+     */
+    private void displayRound()
+    {
+        int roundIndex = roundsPagination.getCurrentPageIndex();
+        ArrayList<Game> gamesInRound = schedule.getGamesInRound(roundIndex);
+        scheduleListView.getItems().setAll(gamesInRound);
+    }
+
+     /**
+     * This is a callback function to reorder a game in the schedule. It is called when the user drags and drops a game into a new position
+     * @param oldIndex The old index of the game to be reordered
+     * @param newIndex The new index of the game to be reordered
+     */
+    private void reorderGame(int oldIndex, int newIndex)
+    {
+        schedule.changeGameIndex(oldIndex, newIndex);
+        displayRound();
+        if(oldIndex == currentGameIndex.get() || newIndex == currentGameIndex.get())
+        {
+            currentGame = schedule.getGame(currentGameIndex.get());  
+            loadCurrentGame();  
+        }
+    }
+
     /**
      * This function is called when the tournament starts. It puts the tournament into active mode
      */
@@ -333,131 +491,10 @@ public class MainController
     }
 
     /**
-     * This function is called when the user presses the add player button
-     * It creates an empty player with a dynamically generated colour
+     * This function is called when a game from the schedule needs to be loaded into the scoreboard
+     * It assigns the player names and colours to the scoreboard labels and resets the spinners
      */
-    @FXML
-    private void addPlayer()
-    {
-        playersTableView.setVisible(true);
-        statsLabel.setVisible(true);
-        String name = "Player " + (players.size()+1);
-        Color colour = null;
-        if(!cachedColours.isEmpty())
-            colour = cachedColours.poll();
-        else
-        {
-            colour = DynamicColouringUtilities.generateNextColour(numColoursGenerated);
-            numColoursGenerated++;
-        }
-        numColoursGenerated++;
-        Player newPlayer = new Player(name, colour);
-        players.add(newPlayer);
-        playersTableView.getItems().add(newPlayer); 
-        MainControllerUtilities.resizePlayersTable(playersTableView, rightVBox, rightTopVBox); 
-        if(players.size() >= 2)
-        {
-            gamesEachSpinner.getValueFactory().setValue(players.size()-1);
-            gamesEachSpinner.getEditor().setText(String.valueOf(players.size()-1));
-            gamesEachSpinner.setDisable(false);
-            generateScheduleButton.setDisable(false);
-        }
-    }
-
-    @FXML
-    private void removePlayer()
-    {
-        players.remove(selectedPlayer);
-        cachedColours.offer(selectedPlayer.getColour());
-        playersTableView.getItems().setAll(players);
-        MainControllerUtilities.resizePlayersTable(playersTableView, rightVBox, rightTopVBox);
-        gamesEachSpinner.getValueFactory().setValue(players.size()-1);
-        gamesEachSpinner.getEditor().setText(String.valueOf(players.size()-1));
-        if(schedule != null && !schedule.isEmpty())
-        {
-            schedule.clear();
-            scheduleListView.getItems().clear();
-            generateScheduleButton.setText("Generate");
-            numGamesRemaining = 0;
-            numGamesRemainingLabel.setText(Integer.toString(numGamesRemaining));
-            roundsPagination.setPageCount(Pagination.INDETERMINATE);
-            startEndTournamentButton.setDisable(true);
-        } 
-        if(players.size() < 2)
-        {
-            gamesEachSpinner.setDisable(true);
-            generateScheduleButton.setDisable(true);
-            gamesEachSpinner.getEditor().clear();
-        }
-    }
-
-    /**
-     * This function is called when the user commits a name to the name column in the players table
-     * It updates their name in the table and cascades to update their name in the schedule as well
-     * @param e
-     */
-    @FXML
-    private void onNameEditCommit(TableColumn.CellEditEvent<Player, String> e) 
-    {
-        Player player = e.getRowValue();
-        player.setName(e.getNewValue());
-        playersTableView.refresh();
-        if(schedule == null || schedule.isEmpty())
-            return;
-        schedule.updatePlayerName(player);
-        displayRound();
-    }
-
-    @FXML
-    private void endGame()
-    {  
-        // Checks player scores
-        int player1Score = player1Spinner.getValue();
-        int player2Score = player2Spinner.getValue();
-        if(player1Score == player2Score)
-        {
-            MainControllerUtilities.createBasicAlert(
-                Alert.AlertType.WARNING, "Warning", 
-                "Score Tied", 
-                "Unable to end game while the score is tied").showAndWait();
-            return; 
-        }
-        if(player1Score < scoreToWin && player2Score < scoreToWin)
-        {
-            Optional<ButtonType> result = MainControllerUtilities.createDecisionAlert(
-                 Alert.AlertType.WARNING, "Warning", 
-                "Winner not above the score to win", 
-                "Are you sure you want to end the game?").showAndWait();
-            if (!result.isPresent() || result.get().getButtonData() == ButtonBar.ButtonData.CANCEL_CLOSE)
-                return;
-        }
-
-        // Decrements the counter
-        numGamesRemaining--;
-        numGamesRemainingLabel.setText(Integer.toString(numGamesRemaining));
-
-        // Updates the player stats
-        playerA.updateStats(player1Score, player2Score);
-        playerB.updateStats(player2Score, player1Score);
-        players.sort(null);
-        playersTableView.getItems().setAll(players);
-        playersTableView.refresh();
-
-        schedule.markGamePlayed(currentGameIndex.get());
-        scheduleListView.refresh();
-
-        // Pulls next game
-        currentGameIndex.set(currentGameIndex.get() + 1);
-        currentGame = schedule.getGame(currentGameIndex.get());
-        if(currentGame == null)
-        {
-            clearScoreboard();
-            return;
-        }
-        loadCurrentGame();
-    }
-
-    private void loadCurrentGame()
+     private void loadCurrentGame()
     {
         playerA = currentGame.getPlayerA();
         playerB = currentGame.getPlayerB();
@@ -471,7 +508,11 @@ public class MainController
         player2Spinner.getValueFactory().setValue(0);
     }
 
-    private void clearScoreboard()
+    /**
+     * This function clears the scoreboard when all the games are finished
+     * It clears the names, resets and disables the spinners, and resets the colour of the labels back to default
+     */
+     private void clearScoreboard()
     {
         player1ScoreLabel.setText("");
         player2ScoreLabel.setText("");
@@ -484,22 +525,6 @@ public class MainController
         player1Spinner.setDisable(true);
         player2Spinner.setDisable(true);   
         scoreToWinTextField.setDisable(true);
-    }
-
-
-    // ===========================================================================================================================================
-    // UI OUTPUT
-    // ===========================================================================================================================================
-    
-
-    /**
-     * This function displays a single round to the screen 
-     */
-    private void displayRound()
-    {
-        int roundIndex = roundsPagination.getCurrentPageIndex();
-        ArrayList<Game> gamesInRound = schedule.getGamesInRound(roundIndex);
-        scheduleListView.getItems().setAll(gamesInRound);
     }
 
       

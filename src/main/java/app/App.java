@@ -18,6 +18,7 @@ public class App extends Application
      * Overide of the start method in scene builder
      * It is called when scene builder starts
      * It loads the root node of the fxml, creates and sets the scene, and sets up the window
+     * @param stage The starting stage for the application
      */
     @Override
     public void start(Stage stage) throws Exception

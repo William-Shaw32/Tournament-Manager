@@ -23,6 +23,11 @@ public class MainControllerUtilities
     // Pseudo css class for when the schedule list-view is put into edit mode
     private static final PseudoClass EDIT_MODE = PseudoClass.getPseudoClass("edit-mode");
 
+    /**
+     * This function configures the score to win text field
+     * In particular it configures the text field to only accept decimal input
+     * @param scoreToWinTextField The score to win text field
+     */
     public static void configureScoreToWinTextField(TextField scoreToWinTextField)
     {
         TextFormatter<String> formatter = new TextFormatter<>(change ->
@@ -31,6 +36,12 @@ public class MainControllerUtilities
         scoreToWinTextField.setTextFormatter(formatter);
     }
 
+    /**
+     * This function configures the player spinners
+     * In particular they are configured as integer spinners which cannot go below 0 and start at 0
+     * @param spinner1 The spinner for playerA
+     * @param spinner2 The spinner for playerB
+     */
     public static void configurePlayerSpinners(Spinner<Integer> spinner1, Spinner<Integer> spinner2)
     {
         SpinnerValueFactory.IntegerSpinnerValueFactory vf1 =
@@ -47,9 +58,9 @@ public class MainControllerUtilities
 
     /**
      * This function configures the behaviour of the games each spinner
-     * @param numPlayers       The number of players in the tournament
-     * @param gamesEachSpinner The games each spinner UI element
-     * @param root             The root stackpane UI element
+     * @param gamesEachSpinner       The games each spinner UI element
+     * @param root                   The root stackpane UI element
+     * @param generateScheduleButton The generate schedule button
      */
     public static void configureGamesEachSpinner(Spinner<Integer> gamesEachSpinner, StackPane root, Button generateScheduleButton)
     {
@@ -105,6 +116,7 @@ public class MainControllerUtilities
     /**
      * Helper function to commit the current value to the spinner
      * @param gamesEachSpinner The games each spinner UI element
+     * @param generateScheduleButton The generate schedule button
      */
     private static void commitSpinner(Spinner<Integer> gamesEachSpinner, Button generateScheduleButton)
     {
@@ -154,6 +166,14 @@ public class MainControllerUtilities
         return alert;
     }
 
+    /**
+     * This function creates a custom clear or keep alert and applies css styling to that alert
+     * @param type The alert type
+     * @param title The alert title
+     * @param header The alert header text
+     * @param content The alert content text
+     * @return A new alert
+     */
     public static Alert createClearKeepAlert(Alert.AlertType type, String title, String header, String content)
     {
         Alert alert = new Alert(type);
@@ -173,6 +193,7 @@ public class MainControllerUtilities
      * This function configures the dynamic behaviour of the schedule list view as well as its off-click behaviour
      * @param scheduleListView The schedule list view
      * @param root The root node of the main-view
+     * @param editScheduleToggle The toggle button to make the schedule editable
      */
     public static void configureScheduleListView(ListView<Game> scheduleListView, StackPane root, ToggleButton editScheduleToggle)
     {
@@ -201,9 +222,10 @@ public class MainControllerUtilities
     }
 
     /**
-    * Checks whether a given node is the specified container or a descendant of it in the scene graph
+    * This function checks whether a given node is the specified container or a descendant of it in the scene graph
     * @param node The node to test
     * @param container The node to test containment against
+    * @return True if the node is inside the container, false otherwise
     */
     private static boolean isInside(Node node, Node container) 
     {
@@ -216,8 +238,9 @@ public class MainControllerUtilities
     }
 
     /**
-    * Checks whether the given node is part of the hierarchy of a JavaFX control
+    * This function checks whether the given node is part of the hierarchy of a JavaFX control
     * @param node The node to test
+    * @return True if the node is part of the hierarchy of a javafx controller, false otherwise
     */
     private static boolean isInsideAControl(Node node) 
     {
@@ -306,7 +329,7 @@ public class MainControllerUtilities
     /**
      * Returns the height of the header area of the given table-view
      * @param playersTableView The players table-view
-     * @return the height of the table's column header, or 0 if the header node cannot be found
+     * @return The height of the table's column header, or 0 if the header node cannot be found
      */
     private static double getPlayersTableHeaderHeight(TableView<Player> playersTableView)
     {
@@ -320,10 +343,16 @@ public class MainControllerUtilities
      * Configures the players table
      * Configures the dynamic colouring as well as the click-away commits feature
      * @param playersTableView The players table-view
+     * @param removePlayerButton The remove player button
      */
     public static void configurePlayersTable(TableView<Player> playersTableView, Button removePlayerButton)
     {
         playersTableView.setRowFactory(tv -> new TableRow<Player>() {
+            /**
+             * Updates the visual state of the table row when its associated item or empty state changes
+             * @param player The player associated with this row
+             * @param empty True if the row is empty, false if it is not empty
+             */
             @Override
             protected void updateItem(Player player, boolean empty)
             {
@@ -429,6 +458,12 @@ public class MainControllerUtilities
         );
     }
 
+    /**
+     * Determines whether the given target node is contained within the specified container node
+     * @param target The node to test for containment
+     * @param container The node to test against as a potential ancestor
+     * @return True if the container is an ancestor of the target (or the same node), false otherwise
+     */
     private static boolean isInNode(Node target, Node container)
     {
         for (Node n = target; n != null; n = n.getParent())

@@ -56,19 +56,24 @@ public class DragDropUtilities
     {
         /**
          * Reorders a game in the schedule list-view
-         * @param oldIndex The list-view index of the cell that was dragged
-         * @param newIndex The list-view index of where the cell was dropped
+         * @param oldIndex The old index of the game to be reordered
+         * @param newIndex The new index of the game to be reordered
          */
-        void reorderGame(int dragIndex, int dropIndex);
+        void reorderGame(int oldIndex, int newIndex);
     }
 
     /**
      * This function configures the drag and drop functionality of the edit schedule list-view feature
-     * @param <T>                 The type of the list-view being set up for reordering (Game)
-     * @param listView            The list-view being set up for reordering
-     * @param renderer            The functional interface for building a draggable cell node used to reorder
-     * @param reorderGameHandler  Functional interface for reordering a game in the schedule list-view
-     * @param dragDropEnabled     Atomic boolean used to store whether drag and drop is currently enabled
+     * @param <T>                   The type of the list-view being set up for reordering (Game)
+     * @param listView              The list-view being set up for reordering
+     * @param renderer              The functional interface for building a draggable cell node used to reorder
+     * @param reorderGameHandler    Functional interface for reordering a game in the schedule list-view
+     * @param dragDropEnabled       Atomic boolean used to store whether drag and drop is currently enabled
+     * @param player1Spinner        The spinner for player A
+     * @param player2Spinner        The spinner for player B
+     * @param roundsPagination      The rounds pagination
+     * @param currentGameIndex      The index of the current game (atomic)
+     * @param numGamesInFullRound   The number of games in a full round (atomic)
      */
     public static <T> void configureDragDrop(
         ListView<T> listView,
