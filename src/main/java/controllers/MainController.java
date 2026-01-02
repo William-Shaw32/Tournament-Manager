@@ -170,9 +170,9 @@ public class MainController
             roundsPagination.setPageCount(Pagination.INDETERMINATE);
             startEndTournamentButton.setDisable(true);
             MainControllerUtilities.createBasicAlert(
-                Alert.AlertType.ERROR, "Error", 
-                "Cannot generate schedule", 
-                "If the number of players is odd, then each player must play an even number of games").showAndWait();
+                Alert.AlertType.WARNING, "Warning", 
+                "Unable to generate schedule", 
+                "If the number of players is odd, then each player must play an even number of games. Please select an even number of games each").showAndWait();
             return;
         }
         generateScheduleButton.setText("Regenerate");
@@ -329,9 +329,7 @@ public class MainController
         addPlayerButton.setDisable(false);
         startEndTournamentButton.setDisable(true);
         roundsPagination.setPageCount(Pagination.INDETERMINATE);
-        endGameButton.setDisable(true);
-        player1Spinner.setDisable(true);
-        player2Spinner.setDisable(true);
+        scoreToWinTextField.setDisable(false);
     }
 
     /**
@@ -412,18 +410,26 @@ public class MainController
 
     @FXML
     private void endGame()
-    {
+    {  
         // Checks player scores
         int player1Score = player1Spinner.getValue();
         int player2Score = player2Spinner.getValue();
         if(player1Score == player2Score)
-            return;
-        if(player1Score < scoreToWin && player2Score < scoreToWin)
-            return;
-        if(numGamesRemaining <= 0)
         {
-            clearScoreboard();
-            return;
+            MainControllerUtilities.createBasicAlert(
+                Alert.AlertType.WARNING, "Warning", 
+                "Score Tied", 
+                "Unable to end game while the score is tied").showAndWait();
+            return; 
+        }
+        if(player1Score < scoreToWin && player2Score < scoreToWin)
+        {
+            Optional<ButtonType> result = MainControllerUtilities.createDecisionAlert(
+                 Alert.AlertType.WARNING, "Warning", 
+                "Winner not above the score to win", 
+                "Are you sure you want to end the game?").showAndWait();
+            if (!result.isPresent() || result.get().getButtonData() == ButtonBar.ButtonData.CANCEL_CLOSE)
+                return;
         }
 
         // Decrements the counter
@@ -473,7 +479,11 @@ public class MainController
         player1ScoreLabel.setBackground(b);
         player2ScoreLabel.setBackground(b);
         player1Spinner.getValueFactory().setValue(0);
-        player2Spinner.getValueFactory().setValue(0);     
+        player2Spinner.getValueFactory().setValue(0);  
+        endGameButton.setDisable(true);
+        player1Spinner.setDisable(true);
+        player2Spinner.setDisable(true);   
+        scoreToWinTextField.setDisable(true);
     }
 
 
