@@ -13,6 +13,6 @@ What this project demonstrates:
 - Use of greedy algorithms and combinatorial reasoning to construct initial tournament schedules
 - Application of recursive backtracking to escape local minima and explore alternative scheduling configurations
 - Organization of a Java project using the Maven build and dependency management format
-- Design of a stateful JavaFX desktop application with dynamic UI updates
+- Design of a stateful JavaFX desktop application with responsive layout and UI reflow to support different window sizes and screen resolutions
 - Implementation of drag-and-drop schedule reordering using ghost images
 
