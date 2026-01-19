@@ -16,3 +16,5 @@ What this project demonstrates:
 - Design of a stateful JavaFX desktop application with responsive layout and UI reflow to support different window sizes and screen resolutions
 - Implementation of drag-and-drop schedule reordering using ghost images
 
+This application was developed primarily as a personal project for the enjoyment of friends and family. 
+Below 
