@@ -1,4 +1,4 @@
-<img width="2555" height="1596" alt="image" src="https://github.com/user-attachments/assets/20b2291f-2461-4313-a650-3ffd10ef5dc6" />
+<img width="2559" height="1599" alt="image" src="https://github.com/user-attachments/assets/9757ee39-fbb1-4e86-9f16-93c447078daa" />
 
 This repository contains a Java desktop application for managing and scheduling competitive 
 tournaments. The application provides tools for creating tournaments, managing participants, 
