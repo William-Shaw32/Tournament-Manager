@@ -94,7 +94,7 @@
             <Region minWidth="15.0" prefHeight="200.0" prefWidth="15.0" />
             <VBox fx:id="centerVBox" alignment="CENTER" prefHeight="1044.0" prefWidth="876.0">
                <children>
-                  <Label fx:id="bannerLabel" alignment="CENTER" minWidth="-Infinity" prefHeight="0.0" prefWidth="545.0" text="Tournament Master 2" textFill="#3eb9f2">
+                  <Label fx:id="bannerLabel" alignment="CENTER" minWidth="-Infinity" prefHeight="0.0" prefWidth="545.0" text="Tournament Manager" textFill="#3eb9f2">
                      <font>
                         <Font name="Gill Sans Ultra Bold" size="40.0" />
                      </font>

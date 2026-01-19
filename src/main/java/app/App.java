@@ -27,7 +27,7 @@ public class App extends Application
         Parent root = loader.load();
         Scene scene = new Scene(root);
         stage.setScene(scene);
-        stage.setTitle("Ping Pong Tournament Master 2");
+        stage.setTitle("Tournament Manager");
         Image icon = new Image(getClass().getResourceAsStream("/images/ping-pong-paddle.png"));
         stage.getIcons().add(icon);
         stage.setMaximized(true);
