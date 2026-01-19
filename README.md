@@ -1,4 +1,4 @@
-Tournament-Manager
+<img width="1280" height="800" alt="image" src="https://github.com/user-attachments/assets/f800f32d-8c40-4990-ae5c-0a9b29700070" />
 
 This repository contains a Java desktop application for managing and scheduling competitive 
 tournaments. The application provides tools for creating tournaments, managing participants, 
