@@ -5,6 +5,6 @@ tournaments. The application provides tools for creating tournaments, managing p
 and generating feasible match schedules under practical constraints.
 
 The project combines algorithmic scheduling with a polished JavaFX user interface, allowing 
-users to configure tournaments, generate schedules, and view stats in real time.
+users to configure tournaments, generate schedules, and view player stats in real time.
 
 While the project was originally created to manage ping pong tournaments, it may be applied to tournaments in any sport. 
