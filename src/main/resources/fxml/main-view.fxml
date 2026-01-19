@@ -94,13 +94,13 @@
             <Region minWidth="15.0" prefHeight="200.0" prefWidth="15.0" />
             <VBox fx:id="centerVBox" alignment="CENTER" prefHeight="1044.0" prefWidth="876.0">
                <children>
+                  <Region minHeight="20.0" prefHeight="50.0" prefWidth="876.0" />
                   <Label fx:id="bannerLabel" alignment="CENTER" minWidth="-Infinity" prefHeight="0.0" prefWidth="545.0" text="Tournament Manager" textFill="#3eb9f2">
                      <font>
                         <Font name="Gill Sans Ultra Bold" size="40.0" />
                      </font>
                   </Label>
-                  <Region minHeight="20.0" prefHeight="20.0" prefWidth="907.0" />
-                  <ImageView fx:id="bannerImage" fitHeight="91.0" fitWidth="200.0" pickOnBounds="true">
+                  <ImageView fx:id="bannerImage" fitHeight="91.0" fitWidth="200.0" pickOnBounds="true" visible="false">
                      <image>
                         <Image url="@../images/space-table.png" />
                      </image>
@@ -108,7 +108,7 @@
                           <Rectangle arcHeight="30.0" arcWidth="30.0" height="91.0" width="200.0" />
                      </clip>
                   </ImageView>
-                  <Region minHeight="20.0" prefHeight="110.0" prefWidth="907.0" />
+                  <Region minHeight="0.0" prefHeight="110.0" prefWidth="876.0" />
                   <HBox alignment="CENTER" prefHeight="122.0" prefWidth="908.0">
                      <children>
                         <Label fx:id="player1ScoreLabel" alignment="CENTER" minHeight="104.0" prefHeight="104.0" prefWidth="500.0" style="-fx-background-color: #243847;" textFill="WHITE">
